@@ -1,0 +1,252 @@
+desc:GJS_Drums
+config:group "Group"  1 1 2 3 4
+
+<?
+printf("options:gmem=16pads%d",group;);
+
+?>
+
+import gfx.jsfx-inc
+import tools.jsfx-inc
+import globalinit.jsfx-inc
+
+
+
+slider1:tchannel=1;<1,16,1>Channel
+
+
+@init
+ext_noinit = 1.0; // not with playback
+
+function logb(x, base) ( log(x)/log(base) );
+
+
+
+function init()
+(
+//config();
+ini+=1;
+precisie=2;
+loaded=0;
+record=0;
+recorded=0;
+recording=0;
+gorecording=0;
+recordingdone=0;
+noteOn = $x90;
+noteOff = $x80;
+
+//midinote=100;
+pad_id=500;
+pad_note=500+16*1;
+
+layers=8;
+bufstart=3000;
+bufsize=(__memtop()-bufstart)/8;
+
+buflength=bufsize;
+samplelength=0;
+bufpos=bufstart;
+samplestart=bufstart;
+sampleend=bufstart;
+
+notesstart=1000;
+notenr=notesstart;
+notevel=notesstart+128;
+notestate=notesstart+128*2;
+notebuf=notesstart+128*3;
+enva=notesstart+128*4;
+envd=notesstart+128*5;
+envs=notesstart+128*6;
+envr=notesstart+128*7;
+recordingknob.event=0;
+recordedknob.event=0;
+
+mystack=0;
+fname=1;
+f=0;
+offset=0;
+octavecor=logb(1/precisie,2)*12;
+
+str_rootnote=50;
+
+//init_sample_data_defaults();
+//load_from_dropped(bufstart);
+);
+
+
+function getnote(nr)
+(
+    this.nr=notenr[nr];
+    this.vel=notevel[nr];
+    this.state=notestate[nr];
+    this.buf=notebuf[nr];
+    this.a=enva[nr];
+    this.d=envd[nr];
+    this.s=envs[nr];
+    this.r=envr[nr];
+    
+);
+
+
+function writenote(nr,vel,state,buf,a,d,s,r)
+(
+  notenr[nr]=nr;
+  notevel[nr]=vel;
+  notestate[nr]=state;state==noteOff ? noteofftest=1;
+  notebuf[nr]=buf;
+  enva[nr]=a;
+  envd[nr]=d;
+  envs[nr]=s;//slider4/100;
+  envr[nr]=r;
+);
+
+
+function adsr()
+(
+  level=gmem[padlevel+tchannel];
+  this.a<1 ? this.a+=(1/srate/gmem[env_a+(tchannel*16)+level]*1000);
+  this.a>1 ? this.a=1;
+  this.a==1 && this.d>gmem[env_s+(tchannel*16)+level]  
+    ? this.d-=1/srate/gmem[env_d+(tchannel*16)+level]*1000;
+
+  this.state==noteOff ? ( this.r-=1/srate/gmem[env_r+(tchannel*16)+level]*1000;);
+  this.r<0 ? this.r=0;
+  //this.d=1;this.s=1;
+  vol=gmem[sampvol+(tchannel*16)+level];
+  this.vol=vol*this.a*this.r*this.d*this.r*this.vel/127;
+
+);
+
+
+init();
+
+@serialize
+ 
+@slider
+
+@block
+
+function getlevel(vel)
+local(level,mode,samplelamount,levelborder)
+(
+  
+  mode=gmem[gpadmode+tchannel];
+  sampleamount=gmem[gsampleamount+tchannel];
+  
+  mode==1 ? (level=gmem[padlevel+tchannel];): //level
+  mode==2 ? ( // velocity
+    levelborder=127/(sampleamount);
+    level=0;;
+    loop(sampleamount,
+      vel>levelborder*(level+1) ? (level+=1);
+    );
+   
+  ): 
+  mode==3 ? ( // random
+    level=floor(rand(sampleamount));
+  
+  );
+  level;
+
+);
+
+
+while (midirecv(boffset,msg1,msg2,msg3)) ( 
+    gmem[midinote+tchannel] == msg2 ? (
+    channel = msg1 & $x0F;
+    onOffStatus = msg1 & $xF0; // 144 == Note On, 128 == Note Off
+
+    trigTest = noteTrig == 0 ? (noteOn):(noteOff); // comparison value based on our note on/off setting
+
+    notenrblock=msg2;xxw3=msg2;
+    channel == inChannel  ? (
+        trigTest == onOffStatus ? (
+            freq=440*2^((msg2-rootnote)/12);
+            vel=msg3;
+            lev=getlevel(msg3);
+            
+            //lev=gmem[padlevel+tchannel];
+            samplestart=bufstart+(lev*bufsize)+(gmem[lp1+(16*tchannel)+lev]);
+            
+
+            div=2^(floor(notenrblock-rootnote+octavecor)/12);
+            div=1;
+            //bufpos=samplestart/div;
+            bufpos=samplestart;
+            inn=1;
+            
+            writenote(notenrblock,vel,noteOn,bufpos,0,1,sustain,1);
+        ) :
+        (
+            
+           note.getnote(notenrblock);
+           writenote(note.nr,note.vel,noteOff,note.buf,note.a,note.d,note.s,note.r);
+        );
+        
+    );
+    );
+    midisend(boffset,msg1,msg2,msg3); // pass through 
+   
+);
+
+
+@sample
+
+tchannel==_global.droppedonpad &&  gmem[loadpad+tchannel]>-1 ? 
+(
+
+ chid=gmem[loadpad+tchannel];
+ chunck=floor(bufsize/1024);
+  
+  cpyg2mem(bufstart+(chid*(chunck-1)),
+    bufstart+(gmem[padlevel+tchannel]*bufsize)+(chid*(chunck-1)),
+    chunck);
+  gmem[loadpad+tchannel]+=1;
+  gmem[loadpad+tchannel]>=1024 ?
+  (
+  _global.sampleready=-1;
+  _global.droppedonpad=-1;
+
+  gmem[loadpad+tchannel]=-1;
+  );
+);  
+
+_global.clearmem==tchannel ? (memset(bufstart,0,__memtop()-bufstart);_global.clearmem=0);
+
+
+spll=0;
+splr=0;
+
+note.getnote(gmem[midinote+tchannel]);
+
+
+note.state>0 ? 
+(
+  note.adsr();
+ 
+  spll += (note.buf)[0]*note.vol;
+  splr += (note.buf)[1]*note.vol;
+  
+  spll <= 1 && spll> -1 ? (spl0=spll;);
+  splr <= 1 && splr> -1 ? (spl1=splr;);
+  note.buf+=2;
+  level=gmem[padlevel+tchannel];
+  size=gmem[lp2+(16*tchannel)+level]-gmem[lp1+(16*tchannel)+level];
+  note.buf>=samplestart+size ? (
+    gmem[sloop+(16*tchannel)+level]? (
+      note.buf=gmem[lp1+(16*tchannel)+level];
+      note.a=0;note.d=1;
+     ):note.state=noteOff;
+    
+  );
+
+  writenote(note.nr,note.vel,note.state,note.buf,note.a,note.d,note.s,note.r);
+  
+  notenrsample+=1;
+
+);
+
+
+@gfx 400 300
+

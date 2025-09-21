@@ -1,0 +1,185 @@
+@init
+
+
+
+function writestring(mem,s)
+local (len,i,c,mem)
+(
+  
+  len=strlen(s);
+  gmem[mem+len-1]=0;
+  i=0;
+  loop(len,
+    c=str_getchar(s,i);
+    
+    gmem[mem+i-1]=c;
+    i=i+1;
+  );
+
+
+);
+
+
+function debug(mem)
+(
+  t0=gmem[mem];
+  t1=gmem[mem+1];
+  t2=gmem[mem+2];
+  t3=gmem[mem+3];
+  t4=gmem[mem+4];
+  t5=gmem[mem+5];
+  t6=gmem[mem+6];
+  t7=gmem[mem+7];
+  t8=gmem[mem+8];
+  t16=gmem[mem+16];
+
+);
+
+function debug2(mem)
+(
+  t0=mem[0];
+  t1=mem[1];
+  t2=mem[2];
+  t3=mem[3];
+  t4=mem[4];
+  t5=mem[5];
+  t6=mem[6];     
+
+);
+
+
+
+
+function readstring(m)
+local (i,ch,myVar)
+(
+  #rstr="";
+  ir=0;
+  
+  
+  while 
+  (
+  myVar=gmem[m+ir-1];
+  //strcat(#file,myvar);
+  sprintf(ch,"%c",myVar);
+  strcat(#rstr,ch);
+  ir+=1;
+  Myvar>0;
+  );
+  #rstr;
+  
+);
+
+
+
+function shortfilename(str)
+local(ch,chs,f,pos)
+(
+  f=1;
+  pos=strlen(str)-1;
+  
+  while(
+    ch=str_getchar(str, pos);
+    pos-=1;
+    !(ch=='\\' || ch=='/');
+  
+  );
+ // strcpy(
+  strcpy_from(f,str, pos+2);
+  f;
+
+);
+
+function getpadstr(pad,level)
+(
+  f=1;
+  f=readstring(400+(pad*8*255)+level*255);
+  f;
+
+);
+
+function writepadstr(pad,level,str)
+(
+
+	writestring(400+(pad*8*255)+level*255,str);
+);
+
+
+
+
+function cpy2gmem(srcaddr,gmemaddr,size)
+local(i)
+(
+	
+  i=0;
+  loop(size,
+    gmem[gmemaddr+i]=srcaddr[i];
+    i+=1;
+  );
+  cpy2gmemfin=1;
+);
+
+function cpyg2mem(gmemaddr,srcaddr,size)
+local(i)
+(
+  i=0;
+  loop(size,
+    srcaddr[i]=gmem[gmemaddr+i];
+    i+=1;
+  );
+
+);
+
+function getfile(str,level)
+local(filename,ptr,fmem)
+(
+  #filestr=str;
+  handle = file_open(#filestr);
+  handle >=0 ? 
+  (
+
+    fmem= bufstart+(level*bufsize);
+
+    file_riff(handle,'rqsr' ,srate);
+    buflength=file_avail(handle);
+    memset( fmem,0,bufsize);
+    file_mem(handle, fmem+44, buflength-44);
+    fileread=1;
+    debug(gmem[fmem]);
+   
+  );
+  
+  file_close(handle);
+  
+  fileready=1;
+
+);
+
+function print(s,val)
+local (str)
+(
+  str=s;
+  strcat(str, "%d");
+  gfx_x=xdeb;gfx_y=ydeb;
+   gfx_setfont(1,"Arial",fontsizedebug,'b');
+  gfx_printf(s,val);
+  ydeb+=interlinie;
+
+);
+
+function debug(x,y,w,h,_fontsize,_interlinie)
+(
+  setcolor(1);
+  setcolor(cyan);
+  
+  xdeb=x*scale;ydeb=y*scale;
+  fontsizedebug=_fontsize*scale;interlinie=_interlinie*scale;
+  w=w*scale;h=h*scale;
+  gfx_rect(xdeb,ydeb,w,h); 
+  v=0.5445;
+  setcolor(red);
+  //print("volume pad 11 %f",gmem[sampvol+(11*16)+0]);
+  
+
+
+);
