@@ -1,10 +1,4 @@
-# gjplugins
-Reaper plugins by Gert-Jan Scharstuhl
-
-- 16Pads multitrack drumsamper for Reaper
-- Gjssampler still a work in process probably not working at the moment
-
-## 16Pads  
+# 16Pads  
 
 ### Features:  
 - 16pads with 8 sample layers each
