@@ -471,6 +471,7 @@ local(i,ingroup,group,l)
      ingroup=1;
      //pad_level[i]=cid;
      gmem[padlevel+i]=l;
+     gmem[gpadmode+i]=9;
      
     );
     i=i+1;

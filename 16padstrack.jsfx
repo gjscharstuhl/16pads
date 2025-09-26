@@ -132,6 +132,7 @@ local(level,mode,samplelamount,levelborder)
 (
   
   mode=gmem[gpadmode+tchannel];
+  zzz1=mode;
   sampleamount=gmem[gsampleamount+tchannel];
   
   mode==1 ? (level=gmem[padlevel+tchannel];): //level
@@ -167,8 +168,7 @@ while (midirecv(boffset,msg1,msg2,msg3)) (
             lev=getlevel(msg3);
             
             //lev=gmem[padlevel+tchannel];
-            samplestart=bufstart+(lev*bufsize)+(gmem[lp1+(16*tchannel)+lev]);
-            
+            samplestart=(gmem[lp1+(16*tchannel)+lev]);          
 
             div=2^(floor(notenrblock-rootnote+octavecor)/12);
             div=1;
@@ -186,6 +186,9 @@ while (midirecv(boffset,msg1,msg2,msg3)) (
         
     );
     );
+    
+  
+  
     midisend(boffset,msg1,msg2,msg3); // pass through 
    
 );
@@ -224,9 +227,11 @@ note.getnote(gmem[midinote+tchannel]);
 note.state>0 ? 
 (
   note.adsr();
- 
-  spll += (note.buf)[0]*note.vol;
-  splr += (note.buf)[1]*note.vol;
+  gmem[gpadmode+tchannel]==9 ? lev= gmem[padlevel+tchannel];
+  zzz2=lev;
+  zzz3=gmem[gpadmode+tchannel];
+  spll += (bufstart+(lev*bufsize)+note.buf)[0]*note.vol;
+  splr += (bufstart+(lev*bufsize)+note.buf)[1]*note.vol;
   
   spll <= 1 && spll> -1 ? (spl0=spll;);
   splr <= 1 && splr> -1 ? (spl1=splr;);
