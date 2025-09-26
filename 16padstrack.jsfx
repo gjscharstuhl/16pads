@@ -147,6 +147,13 @@ local(level,mode,samplelamount,levelborder)
   mode==3 ? ( // random
     level=floor(rand(sampleamount));
   
+  ):
+  mode==4 ? (
+    0;
+    // todo
+  ):
+  mode=5 ? (
+    0;
   );
   level;
 
@@ -227,11 +234,22 @@ note.getnote(gmem[midinote+tchannel]);
 note.state>0 ? 
 (
   note.adsr();
-  gmem[gpadmode+tchannel]==9 ? lev= gmem[padlevel+tchannel];
-  zzz2=lev;
   zzz3=gmem[gpadmode+tchannel];
-  spll += (bufstart+(lev*bufsize)+note.buf)[0]*note.vol;
-  splr += (bufstart+(lev*bufsize)+note.buf)[1]*note.vol;
+  gmem[gpadmode+tchannel]==9 ? lev= gmem[padlevel+tchannel];
+  
+
+  gmem[gpadmode+tchannel]==5 ? // mixed mode
+  (
+    loop (lev=0;8,
+      spll += (bufstart+(lev*bufsize)+note.buf)[0]*note.vol;
+      splr += (bufstart+(lev*bufsize)+note.buf)[1]*note.vol;
+      lev+=1;
+    );
+  ): // single mode
+  (
+    spll += (bufstart+(lev*bufsize)+note.buf)[0]*note.vol;
+    splr += (bufstart+(lev*bufsize)+note.buf)[1]*note.vol;
+  );
   
   spll <= 1 && spll> -1 ? (spl0=spll;);
   splr <= 1 && splr> -1 ? (spl1=splr;);

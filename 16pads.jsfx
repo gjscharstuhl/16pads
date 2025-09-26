@@ -211,6 +211,9 @@ function init()
    playmode[1]="Selected";
    playmode[2]="Velocity";
    playmode[3]="Random";
+   playmode[4]="Cycle";
+   playmode[5]="Mix";
+   
    
   
   groupbase=2300;
@@ -626,7 +629,7 @@ function pop(padid)
 function cyclemode(i)
 (
   pad_mode[i]+=1;
-  pad_mode[i]>3 ? pad_mode[i]=1;
+  pad_mode[i]>5 ? pad_mode[i]=1;
   gmem[gpadmode+i]=pad_mode[i];
 
 );
