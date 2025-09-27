@@ -48,7 +48,7 @@ local(staddr)
   pad_mode[topad]=pad_mode[frompad];
   gmem[gpadmode+topad]=gmem[gpadmode+frompad];
   
-  getfile(#fromstr,0);
+  getfile(#fromstr,0,topad);
   droppedonpad=topad;
   goload=0;wait=0;
 

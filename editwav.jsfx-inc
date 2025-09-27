@@ -23,7 +23,7 @@ local(pad,level,str)
   editcontrolsinit();
   #str=(pad*16)+level;
   
-  getfile(#str,0);
+  getfile(#str,0,pad);
 
  
   attack=gmem[env_a+(gfocus*16)+level];

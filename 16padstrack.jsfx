@@ -208,10 +208,10 @@ tchannel==_global.droppedonpad &&  gmem[loadpad+tchannel]>-1 ?
 (
 
  chid=gmem[loadpad+tchannel];
- chunck=floor(bufsize/1024);
-  
+ chunck=floor(gmem[gbufsize+tchannel]/1024);
+ zzz2=gmem[gbufsize+tchannel]; 
   cpyg2mem(bufstart+(chid*(chunck-1)),
-    bufstart+(gmem[padlevel+tchannel]*bufsize)+(chid*(chunck-1)),
+    bufstart+(gmem[padlevel+tchannel]*gmem[gbufsize+tchannel])+(chid*(chunck-1)),
     chunck);
   gmem[loadpad+tchannel]+=1;
   gmem[loadpad+tchannel]>=1024 ?
@@ -241,15 +241,15 @@ note.state>0 ?
 
   gmem[gpadmode+tchannel]==5 ? // mixed mode
   (
-    loop (lev=0;8,
-      spll += (bufstart+(lev*bufsize)+note.buf)[0]*note.vol;
-      splr += (bufstart+(lev*bufsize)+note.buf)[1]*note.vol;
+    loop (lev=0;gmem[gsampleamount+tchannel],
+      spll += (bufstart+(lev*gmem[gbufsize+tchannel])+note.buf)[0]*note.vol;
+      splr += (bufstart+(lev*gmem[gbufsize+tchannel])+note.buf)[1]*note.vol;
       lev+=1;
     );
   ): // single mode
   (
-    spll += (bufstart+(lev*bufsize)+note.buf)[0]*note.vol;
-    splr += (bufstart+(lev*bufsize)+note.buf)[1]*note.vol;
+    spll += (bufstart+(lev*gmem[gbufsize+tchannel])+note.buf)[0]*note.vol;
+    splr += (bufstart+(lev*gmem[gbufsize+tchannel])+note.buf)[1]*note.vol;
   );
   
   spll <= 1 && spll> -1 ? (spl0=spll;);

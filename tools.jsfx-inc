@@ -130,20 +130,28 @@ local(i)
 
 );
 
-function getfile(str,level)
-local(filename,ptr,fmem)
+function getfile(str,level,pad)
+local(filename,ptr,fmem,buffsize,bufstart)
 (
   #filestr=str;
   handle = file_open(#filestr);
   handle >=0 ? 
   (
-
+	bufstart=3000;
+	bufsize=(__memtop()-bufstart)/8;
     fmem= bufstart+(level*bufsize);
 
     file_riff(handle,'rqsr' ,srate);
     buflength=file_avail(handle);
-    memset( fmem,0,bufsize);
-    file_mem(handle, fmem+44, buflength-44);
+    gmem[gbufsize+pad]=(floor(buflength/bufsize)+1)*bufsize;
+    
+    zzz5=(floor(buflength/bufsize)+1);
+    zzz1=gmem[gbufsize+pad];
+    zzz2=gbufsize;
+    zzz3=bufsize;
+    zzz4=buflength;
+    memset( fmem,0,gmem[gbufsize+pad]);
+    file_mem(handle, bufstart,gmem[gbufsize+pad]);
     fileread=1;
     debug(gmem[fmem]);
    

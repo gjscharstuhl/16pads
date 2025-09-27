@@ -7,6 +7,8 @@ loadpad=200;
 filename=400;
 
 
+
+gbufsize=1900;
 activepad=1920;
 loaded=1940;
 gsampleamount=1960;
@@ -21,6 +23,7 @@ sampvol=2040+(4*17*8);
 lp1=250+(5*17*8);
 lp2=250+(6*17*8);
 sloop=2040+(5*17*8);
+
 
 filemem=3000;
 

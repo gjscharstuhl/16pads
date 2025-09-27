@@ -35,7 +35,7 @@ local(i)
  
   this.focus ? (sel[id]==0 ? (sel[id]=pnote;) : sel[id]=0;);
   i=0;
-  loop (16,
+  loop (17,
     sel[i]>0 ? setpadcolor(i,color,0) : setpadcolor(i,0,0);
 
     i+=1;
@@ -122,8 +122,8 @@ local(l,pad,file)
             gmem[padlevel+pad]=l;
             pad_level[pad]=l; 
             
-            getfile(file,0);
-            cpy2gmem(bufstart,bufstart,bufsize);
+            getfile(file,0,pad);
+            cpy2gmem(bufstart,bufstart,gmem[gbufsize+pad]);
             gmem[loadpad+pad]=0;
             _global.droppedonpad=pad;
              while( gmem[loadpad+tchannel]!=-1 || _global.droppedonpad!=-1)(wait+=1;);
@@ -313,7 +313,7 @@ function transfer()
   goload > -1 ? 
   (
      
-    chunck=bufsize/1024;
+    chunck=gmem[gbufsize+droppedonpad]/1024;
     cpy2gmem(bufstart+(goload*(chunck-1)),bufstart+(goload*(chunck-1)),chunck);
     goload+=1;
     goload>=1024 ? (
@@ -607,7 +607,7 @@ local(staddr,l)
   gmem[env_r+(padid*16)+l]=3;
   gmem[sampvol+(padid*16)+l]=1;
   gmem[lp1+(padid*16)+l]=1;
-  gmem[lp2+(padid*16)+l]=floor(bufsize);
+  gmem[lp2+(padid*16)+l]=floor(gmem[gbufsize+padid]);
   gmem[sloop+(padid*16)+l]=0;
   
  
