@@ -145,15 +145,10 @@ local(filename,ptr,fmem,buffsize,bufstart)
     buflength=file_avail(handle);
     gmem[gbufsize+pad]=(floor(buflength/bufsize)+1)*bufsize;
     
-    zzz5=(floor(buflength/bufsize)+1);
-    zzz1=gmem[gbufsize+pad];
-    zzz2=gbufsize;
-    zzz3=bufsize;
-    zzz4=buflength;
     memset( fmem,0,gmem[gbufsize+pad]);
     file_mem(handle, bufstart,gmem[gbufsize+pad]);
     fileread=1;
-    debug(gmem[fmem]);
+   
    
   );
   
