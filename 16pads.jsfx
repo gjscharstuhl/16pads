@@ -381,7 +381,8 @@ local(i,staddr,l,g,a,j)
     
     file_var(0,gmem[midinote+i]);
     file_var(0,gmem[padlevel+i]);
-    file_var(0,gmem[gpadmode+i]=pad_mode[i]);
+    file_var(0,gmem[gpadmode+i]);
+  
     file_var(0,gmem[gsampleamount+i]);
     
     
