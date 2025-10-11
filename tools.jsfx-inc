@@ -175,7 +175,7 @@ local(filename,ptr,buffsize,bufstart)
 	  chunck=1000;
 	  chid=0;
   );
-  gmem[loadpad+tchannel] >=0 && gmem[loadpad+pad]==1 ? 
+  gmem[loadpad+pad]==1 ? 
   (
     
 
@@ -191,9 +191,9 @@ local(filename,ptr,buffsize,bufstart)
   
   loadfase==2 ?(
 	file_close(handle);
-  
+	_global.droppedonpad=-1;
 	fileready=1;
-	loadfase=3;
+	gmem[loadpad+tchannel] =-1;
   )
 	
 );
