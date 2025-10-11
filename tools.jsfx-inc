@@ -161,7 +161,7 @@ local(filename,ptr,fmem,buffsize,bufstart)
 function getfile2(str,level,pad)
 local(filename,ptr,buffsize,bufstart)
 (
-  loadfase==0 ? (
+  gmem[loadpad+pad]==0 ? (
 	  #filestr=str;
 	  handle = file_open(#filestr);
 	  file_riff(handle,'rqsr' ,srate);
@@ -171,11 +171,11 @@ local(filename,ptr,buffsize,bufstart)
 	  bufsize=(__memtop()-bufstart)/8;
 	  bfs=max(gmem[gbufsize+pad]=(floor(buflength/bufsize)+1)*bufsize,bfs);
 	   fmem= bufstart+(level*bufsize);
-	  loadfase=1;
+	  gmem[loadpad+pad]=1;
 	  chunck=1000;
 	  chid=0;
   );
-  handle >=0 && loadfase==1 ? 
+  gmem[loadpad+tchannel] >=0 && gmem[loadpad+pad]==1 ? 
   (
     
 
@@ -184,7 +184,7 @@ local(filename,ptr,buffsize,bufstart)
 	//memset( bufstart+sloaded,1,chunck-1);
     chid+=1;
     //bufstart[sloaded]=1;
-    sloaded>bfs ? (loadfase=2;);
+    sloaded>bfs ? (gmem[loadpad+pad]=2;);
     
    
   );
