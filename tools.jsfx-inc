@@ -180,7 +180,7 @@ local(filename,ptr,buffsize,bufstart)
     
 
 	sloaded=chid*chunck;
-	file_mem(handle,bufstart+(level*bfs)+sloaded,chunck);
+	file_mem(handle,bufstart+(level*bfs)+sloaded,chunk);
 	//memset( bufstart+sloaded,1,chunck-1);
     chid+=1;
     //bufstart[sloaded]=1;
