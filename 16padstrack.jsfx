@@ -207,7 +207,7 @@ tchannel==_global.droppedonpad &&  gmem[loadpad+tchannel]>-1 ?
 (
   str="/home/gjs/reaperprojects/test/mpdjam/solo1.wav";
   str=readstring(gfilename);
-  getfile2(str,gmem[padlevel+tchannel],tchannel);
+  getfile(str,gmem[padlevel+tchannel],tchannel);
   
 );  
 

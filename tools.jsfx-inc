@@ -143,10 +143,11 @@ local(filename,ptr,fmem,buffsize,bufstart)
 
     file_riff(handle,'rqsr' ,srate);
     buflength=file_avail(handle);
+   // bfs=max(gmem[gbufsize+pad]=(floor(buflength/bufsize)+1)*bufsize,bfs);
     gmem[gbufsize+pad]=(floor(buflength/bufsize)+1)*bufsize;
     
     memset( fmem,0,gmem[gbufsize+pad]);
-    file_mem(handle, bufstart,gmem[gbufsize+pad]);
+    file_mem(handle, bufstart+level*bufsize,gmem[gbufsize+pad]);
     fileread=1;
    
    
@@ -180,20 +181,20 @@ local(filename,ptr,buffsize,bufstart)
     
 
 	sloaded=chid*chunck;
-	file_mem(handle,bufstart+(level*bfs)+sloaded,chunk);
+	file_mem(handle,bufstart+(level*bfs)+sloaded,chunck);
 	//memset( bufstart+sloaded,1,chunck-1);
     chid+=1;
     //bufstart[sloaded]=1;
-    sloaded>bfs ? (gmem[loadpad+pad]=2;);
+    sloaded>buflength ? (gmem[loadpad+pad]=2;);
     
    
   );
   
-  loadfase==2 ?(
+  gmem[loadpad+pad]==2 ?(
 	file_close(handle);
 	_global.droppedonpad=-1;
 	fileready=1;
-	gmem[loadpad+tchannel] =-1;
+	gmem[loadpad+pad] =-1;
   )
 	
 );
