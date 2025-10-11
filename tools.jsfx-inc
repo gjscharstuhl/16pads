@@ -143,11 +143,11 @@ local(filename,ptr,fmem,buffsize,bufstart)
 
     file_riff(handle,'rqsr' ,srate);
     buflength=file_avail(handle);
-   // bfs=max(gmem[gbufsize+pad]=(floor(buflength/bufsize)+1)*bufsize,bfs);
-    gmem[gbufsize+pad]=(floor(buflength/bufsize)+1)*bufsize;
+    //bfs=gmem[gbufsize+pad]=floor(buflength/bufsize)+1)*bufsize);
+    bfs=gmem[gbufsize+pad]=max(bfs,(floor(buflength/bufsize)+1)*bufsize);
     
-    memset( fmem,0,gmem[gbufsize+pad]);
-    file_mem(handle, bufstart+level*bufsize,gmem[gbufsize+pad]);
+    //memset( fmem,0,bfs);
+    file_mem(handle, bufstart+level*bfs,buflength);
     fileread=1;
    
    

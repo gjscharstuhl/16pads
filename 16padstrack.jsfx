@@ -263,4 +263,4 @@ note.state>0 ?
 @gfx 400 300
 
 //memset( bufstart,1,bfs);
-gdrawwav(10,10,300,150,bufstart,bfs,0);
+gdrawwav(10,10,300,150,bufstart+bfs,bfs,0);
