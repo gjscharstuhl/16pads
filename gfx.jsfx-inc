@@ -454,7 +454,7 @@ local(i,acc,gfxoffset,gfx,gwidth)
   loop (w*acc,
     gfx_y=y+h/2;
     glob==1 ? gfx_lineto(gfx_x,gfx_y+gmem[samplestart+floor(i)]*h/8);
-    glob==0 ? gfx_lineto(gfx_x,gfx_y+samplestart[floor(i)]*h/8*fac);
+    glob==0 ? gfx_lineto(gfx_x,gfx_y+samplestart[floor(i)]*h/8);
     
     gfx_x-=1/acc;
     

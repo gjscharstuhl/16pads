@@ -21,7 +21,6 @@ ext_noinit = 1.0; // not with playback
 function logb(x, base) ( log(x)/log(base) );
 
 
-
 function init()
 (
 //config();
@@ -70,7 +69,7 @@ offset=0;
 octavecor=logb(1/precisie,2)*12;
 
 str_rootnote=50;
-
+loadfase=0;
 //init_sample_data_defaults();
 //load_from_dropped(bufstart);
 );
@@ -204,24 +203,12 @@ while (midirecv(boffset,msg1,msg2,msg3)) (
 
 @sample
 
-tchannel==_global.droppedonpad &&  gmem[loadpad+tchannel]>-1 ? 
-(
-
- chid=gmem[loadpad+tchannel];
- chunck=floor(gmem[gbufsize+tchannel]/1024);
- zzz2=gmem[gbufsize+tchannel]; 
-  cpyg2mem(bufstart+(chid*(chunck-1)),
-    bufstart+(gmem[padlevel+tchannel]*gmem[gbufsize+tchannel])+(chid*(chunck-1)),
-    chunck);
-  gmem[loadpad+tchannel]+=1;
-  gmem[loadpad+tchannel]>=1024 ?
-  (
-  _global.sampleready=-1;
-  _global.droppedonpad=-1;
-
-  gmem[loadpad+tchannel]=-1;
-  );
-);  
+//tchannel==_global.droppedonpad &&  gmem[loadpad+tchannel]>-1 ? 
+//(
+  str="/home/gjs/reaperprojects/test/mpdjam/solo1.wav";
+  getfile2(str,level,pad);
+  
+//);  
 
 _global.clearmem==tchannel ? (memset(bufstart,0,__memtop()-bufstart);_global.clearmem=0);
 
@@ -274,3 +261,5 @@ note.state>0 ?
 
 @gfx 400 300
 
+//memset( bufstart,1,bfs);
+gdrawwav(10,10,300,150,bufstart,bfs,0);
