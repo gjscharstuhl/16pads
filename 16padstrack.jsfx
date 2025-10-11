@@ -203,12 +203,13 @@ while (midirecv(boffset,msg1,msg2,msg3)) (
 
 @sample
 
-//tchannel==_global.droppedonpad &&  gmem[loadpad+tchannel]>-1 ? 
-//(
+tchannel==_global.droppedonpad &&  gmem[loadpad+tchannel]>-1 ? 
+(
   str="/home/gjs/reaperprojects/test/mpdjam/solo1.wav";
+  str=readstring(gfilename);
   getfile2(str,level,pad);
   
-//);  
+);  
 
 _global.clearmem==tchannel ? (memset(bufstart,0,__memtop()-bufstart);_global.clearmem=0);
 

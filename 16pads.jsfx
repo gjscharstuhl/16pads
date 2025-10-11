@@ -121,9 +121,9 @@ local(l,pad,file)
 
             gmem[padlevel+pad]=l;
             pad_level[pad]=l; 
-            
-            getfile(file,0,pad);
-            cpy2gmem(bufstart,bufstart,gmem[gbufsize+pad]);
+            writestring(gfilename,file);
+            //getfile(file,0,pad);
+            //cpy2gmem(bufstart,bufstart,gmem[gbufsize+pad]);
             gmem[loadpad+pad]=0;
             _global.droppedonpad=pad;
              while( gmem[loadpad+tchannel]!=-1 || _global.droppedonpad!=-1)(wait+=1;);
