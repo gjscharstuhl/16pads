@@ -137,6 +137,8 @@ local(filename,ptr,fmem,buffsize,bufstart)
   handle = file_open(#filestr);
   handle >=0 ? 
   (
+	#zzz=str;
+	zzz4=level;
 	bufstart=3000;
 	bufsize=(__memtop()-bufstart)/8;
     fmem= bufstart+(level*bufsize);

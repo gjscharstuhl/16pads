@@ -13,6 +13,7 @@ import globalinit.jsfx-inc
 
 
 slider1:tchannel=1;<1,16,1>Channel
+slider2:tlev=0;<0,7,1>Level
 
 
 @init
@@ -263,4 +264,4 @@ note.state>0 ?
 @gfx 400 300
 
 //memset( bufstart,1,bfs);
-gdrawwav(10,10,300,150,bufstart+bfs,bfs,0);
+gdrawwav(10,10,300,150,bufstart+(bfs*tlev),bfs,0);

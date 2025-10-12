@@ -106,6 +106,25 @@ function hilightfocus(id)
 
 );
 
+function loadsample(pad,level)
+(
+           file=(pad*16)+level;
+           #f=file;
+            writestring(gfilename,file);
+            gmem[padlevel+pad]=level;
+            pad_level[pad]=level; 
+            
+            //getfile(file,0,pad);
+            //cpy2gmem(bufstart,bufstart,gmem[gbufsize+pad]);
+            gmem[loadpad+pad]=0;
+            //gmem[gpadmode+pad]=1;
+            _global.droppedonpad=pad;
+             while( gmem[loadpad+pad]!=-1 || _global.droppedonpad!=-1)(wait+=1;);
+         
+
+);
+
+
 function loadsamples()
 local(l,pad,file)
 (
@@ -116,18 +135,7 @@ local(l,pad,file)
     loop (16,
       l=0;
       loop(pad_sampleamount[pad],
-           file=(pad*16)+l;
-           #f=file;
-
-            gmem[padlevel+pad]=l;
-            pad_level[pad]=l; 
-            writestring(gfilename,file);
-            //getfile(file,0,pad);
-            //cpy2gmem(bufstart,bufstart,gmem[gbufsize+pad]);
-            gmem[loadpad+pad]=0;
-            _global.droppedonpad=pad;
-             while( gmem[loadpad+tchannel]!=-1 || _global.droppedonpad!=-1)(wait+=1;);
-         
+        loadsample(pad,l);
         l+=1;
       );
 
@@ -313,9 +321,9 @@ function transfer()
   goload > -1 ? 
   (
      
-    chunck=gmem[gbufsize+droppedonpad]/1024;
-    cpy2gmem(bufstart+(goload*(chunck-1)),bufstart+(goload*(chunck-1)),chunck);
-    goload+=1;
+    //chunck=gmem[gbufsize+droppedonpad]/1024;
+    //cpy2gmem(bufstart+(goload*(chunck-1)),bufstart+(goload*(chunck-1)),chunck);
+    //goload+=1;
     goload>=1024 ? (
 
       _global.droppedonpad=droppedonpad;
@@ -548,7 +556,7 @@ while (midirecv(boffset,msg1,msg2,msg3)) (
 @sample
 
 
-transfer();
+//transfer();
     
 @gfx 1000 500
 
@@ -584,21 +592,21 @@ local(staddr,l)
   staddr=(padid*16);l=0;
   while (strlen(staddr)>0)( staddr+=1;l+=1;);
   strcpy(staddr,file);
- 
   
-  gmem[padlevel+padid]=l;
-  pad_level[padid]=l; 
-  gmem[level+padid]=l;
-  droppedonpad=padid;
-
+  pad_sampleamount[padid]=l+1;
+  zzz1=pad_sampleamount[padid]=l+1;
+  loadsample(padid,l);
+  //getfile(file,0,pad);
+  //cpy2gmem(bufstart,bufstart,gmem[gbufsize+pad]);
+   
   getsample(padid,gmem[padlevel+padid]);
   //getfile(#filestr,0);
   //getfile(file,0);
   
   
-  goload=0;
+ // goload=0;
   
-  pad_sampleamount[padid]=l+1;
+  
   gmem[gsampleamount+padid]=pad_sampleamount[padid];
   
   
