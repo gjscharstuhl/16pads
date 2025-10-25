@@ -110,17 +110,20 @@ function loadsample(pad,level)
 (
            file=(pad*16)+level;
            #f=file;
-            writestring(gfilename,file);
+            writestring(gfilename+(16*50*level)+(50*level),file);
             gmem[padlevel+pad]=level;
             pad_level[pad]=level; 
             
-            //getfile(file,0,pad);
-            //cpy2gmem(bufstart,bufstart,gmem[gbufsize+pad]);
-            gmem[loadpad+pad]=0;
+
+            gmem[loadpad+pad]=1;
+            _global.loading=1;
+            gmem[glevel]=level;
             //gmem[gpadmode+pad]=1;
-            _global.droppedonpad=pad;
-             while( gmem[loadpad+pad]!=-1 || _global.droppedonpad!=-1)(wait+=1;);
-         
+           
+
+            // while( _global.loading==1)(wait+=1;);
+             //gmem[padlevel+pad]=0;
+
 
 );
 
@@ -128,25 +131,22 @@ function loadsample(pad,level)
 function loadsamples()
 local(l,pad,file)
 (
-  (
+  
     readmode=1;
     mode=1;
     pad=1;
-    loop (16,
-      l=0;
-      loop(pad_sampleamount[pad],
-        loadsample(pad,l);
-        l+=1;
-      );
+       _global.droppedonpad=pad;
+      loop (16,
+        l=0;
+        loop(pad_sampleamount[pad],
+          loadsample(pad,l);
+          l+=1;
+        );
+      pad+=1;
+    );
 
     
-    pad+=1);
-    loop (i=0;16,gmem[loadpad+droppedonpad]=-1;);
-  
-  );
-  _global.droppedonpad=-1;
-  _global.sampleread=-1;
-  serialiseready=0;
+
 );
 
 function init()

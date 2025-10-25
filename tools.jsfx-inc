@@ -66,6 +66,7 @@ local (i,ch,myVar)
   ir+=1;
   Myvar>0;
   );
+   _global.loading=0;
   #rstr;
   
 );
@@ -162,46 +163,161 @@ local(filename,ptr,fmem,buffsize,bufstart)
 );
 
 function getfile2(str,level,pad)
-local(filename,ptr,buffsize,bufstart)
+local(filename,ptr)
 (
-  gmem[loadpad+pad]==0 ? (
+  loadfase==0 ? (
 	  #filestr=str;
+	  fchunck=10;
+	  chid=0;
 	  handle = file_open(#filestr);
 	  file_riff(handle,'rqsr' ,srate);
 	  buflength=file_avail(handle);
 	  
 	  bufstart=3000;
 	  bufsize=(__memtop()-bufstart)/8;
-	  bfs=max(gmem[gbufsize+pad]=(floor(buflength/bufsize)+1)*bufsize,bfs);
+	 // bfs=max(gmem[gbufsize+pad]=(floor(buflength/bufsize)+1)*bufsize,bfs);
+	  bfs=bufsize;
 	   fmem= bufstart+(level*bufsize);
+	   memset( bufstart,0,bfs);
 	  gmem[loadpad+pad]=1;
-	  chunck=1000;
-	  chid=0;
-  );
-  gmem[loadpad+pad]==1 ? 
+	  
+	  
+	  handle>=0 ? loadfase=1;
+  ):
+  loadfase==1 ? 
   (
     
 
-	sloaded=chid*chunck;
-	file_mem(handle,bufstart+(level*bfs)+sloaded,chunck);
+	sloaded=chid*fchunck;
+	file_mem(handle,bufstart+(level*bfs)+sloaded,fchunck);
 	//memset( bufstart+sloaded,1,chunck-1);
     chid+=1;
+    zzz9+=1;
     //bufstart[sloaded]=1;
-    sloaded>buflength ? (gmem[loadpad+pad]=2;);
-    
-   
-  );
+    sloaded>bfs ? loadfase=2;
+    zzz6=chid;
+    zzz7=sloaded;
+    zzz8=loadfase;
+  ):
   
-  gmem[loadpad+pad]==2 ?(
+  loadfase==2 ?
+  (
 	file_close(handle);
 	_global.droppedonpad=-1;
 	fileready=1;
-	gmem[loadpad+pad] =-1;
-  )
+	gmem[loadpad+pad] =2;
+	//loadfase=-1;
+	chid=0;
+	zzz14=1;
+  );
 	
 );
 
+function getfile3(str,level,pad)
+local(filename,ptr)
+(
 
+  loadfase[level]==0  ? (
+	  #filestr=str;
+	  fchunck=100;
+	  chid[level]=0;
+	  handle[level] = file_open(#filestr);
+	  file_riff(handle[level],'rqsr' ,srate);
+	  buflength=file_avail(handle[level]);
+	  
+	  bufstart=3000;
+	  bufsize=(__memtop()-bufstart)/8;
+	  bfs=gmem[gbufsize+pad]=max((floor(buflength/bufsize)+1)*bufsize,bfs);
+	  //bfs=bufsize*2;
+	  
+	   //memset( bufstart,0,bfs);
+	  gmem[loadpad+pad]=1;
+	  
+	  
+	  handle[level]>=0 ? loadfase[level]=1;
+  ):
+  loadfase[level]==1 ? 
+  (
+    
+
+	sloaded[level]=chid[level]*fchunck;
+	file_mem(handle[level],bufstart+(level*bfs)+sloaded[level],fchunck);
+	//memset( bufstart+sloaded,1,chunck-1);
+    chid[level]+=1;
+
+    //bufstart[sloaded]=1;
+    sloaded[level]>bfs ? loadfase[level]=2;
+    zzz6=chid[level];
+    zzz7=sloaded[level];
+    zzz8=loadfase;
+  ):
+  
+  loadfase[level]==2 ?
+  (
+	file_close(handle[level]);
+	_global.droppedonpad=-1;
+	fileready=1;
+	gmem[loadpad+pad] =2;
+	//loadfase=-1;
+	chid=0;
+	
+	loadfase[level]=3;
+  );
+
+);
+
+function getfile4(str,level,pad)
+local(filename,ptr)
+(
+  
+  loadfase[level]==0 ? (
+	  #filestr=str;
+	  fchunck=10;
+	  chid[level]=0;
+	  handle[level] = file_open(#filestr);
+	  file_riff(handle[level],'rqsr' ,srate);
+	  buflength=file_avail(handle[level]);
+	  
+	  bufstart=3000;
+	  bufsize=(__memtop()-bufstart)/8;
+	  bfs=max(gmem[gbufsize+pad]=(floor(buflength/bufsize)+1)*bufsize,bfs);
+	 // bfs=bufsize;
+	  
+	   //memset( bufstart,0,bfs);
+	  gmem[loadpad+pad]=1;
+	  
+	  
+	  handle[level]>=0 ? loadfase[level]=1;
+  ):
+  loadfase[level]==1 ? 
+  (
+    
+
+	sloaded[level]=chid[level]*fchunck;
+	file_mem(handle[level],bufstart+(level*bfs)+sloaded[level],fchunck);
+	//memset( bufstart+sloaded,1,chunck-1);
+    chid[level]+=1;
+
+    //bufstart[sloaded]=1;
+    sloaded[level]>bfs ? loadfase[level]=2;
+    zzz6=chid[level];
+    zzz7=sloaded[level];
+    zzz8=loadfase;
+  ):
+  
+  loadfase[level]==2 ?
+  (
+	file_close(handle[level]);
+	_global.droppedonpad=-1;
+	fileready=1;
+	gmem[loadpad+pad] =2;
+	//loadfase=-1;
+	chid=0;
+	
+	loadfase[level]=3;
+  );
+	
+);
 function print(s,val)
 local (str)
 (

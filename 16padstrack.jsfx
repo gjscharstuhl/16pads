@@ -37,6 +37,11 @@ recordingdone=0;
 noteOn = $x90;
 noteOff = $x80;
 
+chid=750;
+sloaded=760;
+loadfase=770;
+handle=780;
+
 //midinote=100;
 pad_id=500;
 pad_note=500+16*1;
@@ -69,8 +74,8 @@ f=0;
 offset=0;
 octavecor=logb(1/precisie,2)*12;
 
-str_rootnote=50;
-loadfase=0;
+
+
 //init_sample_data_defaults();
 //load_from_dropped(bufstart);
 );
@@ -203,14 +208,42 @@ while (midirecv(boffset,msg1,msg2,msg3)) (
 
 
 @sample
+zzz10=gmem[loadpad+tchannel];
 
-tchannel==_global.droppedonpad &&  gmem[loadpad+tchannel]>-1 ? 
+function getstrings()
+local(level)
 (
-  str="/home/gjs/reaperprojects/test/mpdjam/solo1.wav";
-  str=readstring(gfilename);
-  getfile(str,gmem[padlevel+tchannel],tchannel);
+   _global.droppedonpad==tchannel ?(
+   level=gmem[padlevel+tchannel];
+  gmem[padlevel+tchannel]==0  ? #f0=readstring(gfilename+(16*50*level)+(50*level)):
+  gmem[padlevel+tchannel]==1  ? #f1=readstring(gfilename+(16*50*level)+(50*level)):
+  gmem[padlevel+tchannel]==2 ? #f2=readstring(gfilename):
+  gmem[padlevel+tchannel]==3 ? #f3=readstring(gfilename):
+  gmem[padlevel+tchannel]==4 ? #f4=readstring(gfilename):
+  gmem[padlevel+tchannel]==5 ? #f5=readstring(gfilename):
+  gmem[padlevel+tchannel]==6 ? #f6=readstring(gfilename):
+  gmem[padlevel+tchannel]==7 ? #f7=readstring(gfilename);
+  zzz=gmem[padlevel+tchannel];
   
-);  
+  #f0="E:/music/test/mpdjam/solo1.wav";
+  #f1="E:/music/test/mpdjam/solo2.wav";
+  );
+
+);
+
+
+  getstrings();
+  //str="/home/gjs/reaperprojects/test/mpdjam/solo1.wav";
+  
+  getfile3( #f0,0,tchannel);
+  getfile3( #f1,1,tchannel);
+  getfile3( #f2,2,tchannel);
+  getfile3( #f3,3,tchannel);
+  getfile3( #f4,4,tchannel);
+  getfile3( #f5,5,tchannel);
+  
+  
+
 
 _global.clearmem==tchannel ? (memset(bufstart,0,__memtop()-bufstart);_global.clearmem=0);
 
