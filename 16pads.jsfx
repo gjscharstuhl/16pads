@@ -106,37 +106,6 @@ function hilightfocus(id)
 
 );
 
-function loadsample(pad,level)
-local(level)
-(
-           file=(pad*16)+level;
-           #f=file;
-           
-           // writestring(gfilename+(16*50*level)+(50*level),file);
-           _global.clearlevel=level;
-           gmem[loadpad+pad]=1;
-           // writestring(gfilename,file);
-           memset(gfilename,1,200);
-            writestring(gfilename+1, file);
-            
-            gmem[padlevel+pad]=level;
-            
-            pad==16 && level==0 ? #z1=file;
-            pad==16 && level==1 ? #z2=file;
-            pad_level[pad]=level; 
-            
-
-            
-             _global.droppedonpad=pad;
-            _global.loading=1;
-    
-           
-             while( gmem[loadpad+pad]==1)(wait+=1;);
-             _global.clearlevel=-1;
-            loop(100000,0;);
-
-);
-
 function makeclean()
 (
   pad=1;

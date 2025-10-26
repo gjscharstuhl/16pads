@@ -348,29 +348,35 @@ function debug(x,y,w,h,_fontsize,_interlinie)
 
 );
 
-function encode_string(s) local(c_s, i) (
-  i = 0;
-  c_s = 0;
-  while(
-    c_s = c_s << 8;
-    c_s = c_s + str_getchar(s, 4-i);  
-    i = i+1;
-    i < 5;
-  );
-  c_s;
+
+function loadsample(pad,level)
+local(level)
+(
+		 file=(pad*16)+level;
+		 #f=file;
+		 
+		 // writestring(gfilename+(16*50*level)+(50*level),file);
+		 _global.clearlevel=level;
+		 gmem[loadpad+pad]=1;
+		 // writestring(gfilename,file);
+		 memset(gfilename,1,200);
+		  writestring(gfilename+1, file);
+		  
+		  gmem[padlevel+pad]=level;
+		  
+		  pad==16 && level==0 ? #z1=file;
+		  pad==16 && level==1 ? #z2=file;
+		  pad_level[pad]=level; 
+		  
+
+		  
+		   _global.droppedonpad=pad;
+		  _global.loading=1;
+    
+		 
+		   while( gmem[loadpad+pad]==1)(wait+=1;);
+		   _global.clearlevel=-1;
+		  loop(100000,0;);
+
 );
 
-function decode_string(c_s) local (i, c_ss, _) (
-  i = 0;
-  strcpy (_, "");
-  while(
-    c_ss = c_s & 0xFF;
-    c_s = c_s >> 8;
-    c_ss >= 32 ? (
-	 str_setchar(_, -0.25, c_ss);
-	   i += 1;
-    );  
-    (i < 4) & (c_ss >= 32);
-  );
-  _;
-);

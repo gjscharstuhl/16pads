@@ -48,48 +48,47 @@ local(staddr)
   pad_mode[topad]=pad_mode[frompad];
   gmem[gpadmode+topad]=gmem[gpadmode+frompad];
   
-  getfile(#fromstr,0,topad);
+  //getfile(#fromstr,0,topad);
+  loadsample(topad,l);
+  
   droppedonpad=topad;
   goload=0;wait=0;
 
 );
 
-function copy(frompad*,topad)
-
+function copy(frompad,topad)
+local(l)
 (
   print("copy from %d",frompad);
   print("copy to %d",topad);
   
   cplevels=pad_sampleamount[frompad];
-  goload==-1 ? (copysample(frompad,topad,cplev);cplev+=1;);
-  cplev>=pad_sampleamount[frompad] || cplev>7 ? (docopy=0;frompad=-1;);
+  l=0;
+  loop(cplevels,
+    
+    copysample(frompad,topad,l);
+    l+=1;
+  );
+  docopy=0;
+  frompad=-1;
+  //goload==-1 ? (copysample(frompad,topad,cplev);cplev+=1;);
+  //cplev>=pad_sampleamount[frompad] || cplev>7 ? (docopy=0;frompad=-1;);
 
 );
 
-function swap(frompad*,topad)
+function swap(frompad,topad)
 local(l)
 (
-  swapfrom=frompad;
-  fase==0 ? (
-    cplevels=pad_sampleamount[topad];
-    goload==-1 ? (copysample(topad,17,cplev);cplev+=1;);
-    cplev>=pad_sampleamount[topad] || cplev>7 ? (docopy=0;fase=1;cplev=0);
-    
+  print("swap from %d",frompad);
+  print("to %d",topad);
   
-  ): fase==1 ? (
-    cplevels=pad_sampleamount[frompad];
-    goload==-1 ? (copysample(frompad,topad,cplev);cplev+=1;);
-    cplev>=pad_sampleamount[frompad] || cplev>7 ? (docopy=0;fase=2;cplev=0;);
-    
-  ): fase==2 ? (
-    cplevels=pad_sampleamount[17];
-    goload==-1 ? (copysample(17,frompad,cplev);cplev+=1;);
-    cplev>=pad_sampleamount[17] || cplev>7 ? (docopy=0;fase=3;cplev=0;);
-    
-  ): (
-    doswap=0;frompad=-1;
-  );
+  tpad=17;
+  copy(topad,tpad);
+  copy(frompad,topad);
+  copy(17,frompad);
+  
 
+  doswap=0;frompad=-1;
 );
 
 function copypad()
@@ -106,10 +105,10 @@ function copypad()
   mouse_cap == 5 && frompad==-1 ? (frompad=gfocus;cplev=0;tcopy=1;);
   mouse_cap == 9 && frompad==-1 ? (frompad=gfocus;cplev=0;tswap=1;);
   mouse_cap ==17 ? (loop (8,pop(gfocus);_global.clearmem=gfocus;));
-  mouse_cap==0 && frompad>=0 && frompad!=gfocus && tcopy ? (docopy=1;tcopy=0;tswap=0;);
-  mouse_cap==0 && frompad>=0 && frompad!=gfocus && tswap ? (doswap=1;tcopy=0;tswap=0;fase=0;);
-  docopy ? copy(frompad,gfocus);
-  doswap ? swap(frompad,gfocus);
+  mouse_cap==0 && frompad>=0 && frompad!=gfocus && tcopy ? (docopy=1;tcopy=0;tswap=0; copy(frompad,gfocus);frompad=-1;);
+  mouse_cap==0 && frompad>=0 && frompad!=gfocus && tswap ? (doswap=1;tcopy=0;tswap=0;fase=0;swap(frompad,gfocus);frompad=-1;);
+
+  //doswap ? swap(frompad,gfocus);
 );
 
 
