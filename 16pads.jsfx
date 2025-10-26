@@ -135,9 +135,9 @@ local(level)
 
 
 function loadsamples()
-local(l,pad,file)
+local(l,pad,file,i)
 (
-  
+      loop(i=0;100000,wait+=1;);
       pad=1;
       
       loop (16,
