@@ -137,6 +137,15 @@ local(level)
 
 );
 
+function makeclean()
+(
+  pad=1;
+  loop(16,
+    _global.clearmem=pad;
+    while (_global.clearmem!=0)(0;);
+    pad+=1;
+  );
+);
 
 function loadsamples()
 local(l,pad,file,i)
@@ -145,6 +154,8 @@ local(l,pad,file,i)
       pad=1;
       
       loop (16,
+       // _global.clearmem=pad;
+       // while (_global.clearmem!=0)(0;);
         l=0;
         loop(pad_sampleamount[pad],
           loadsample(pad,l);
@@ -439,8 +450,11 @@ local(i,staddr,l,g,a,j)
 
 
 while (_global.padsloaded<16)(0;);
+//makeclean(); // mischien nweer weghalem als samples niet geledn worden
 save();
-ls==1 ? (loadsamples(););
+
+loadsamples();
+
 ls=1;
 
 

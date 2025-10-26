@@ -184,7 +184,7 @@ local(level)
 init();
 
 @serialize
-//file_mem(0,bufstart,__memtop()-bufstart);
+file_mem(0,bufstart,__memtop()-bufstart);
  
 @slider
 
@@ -263,6 +263,12 @@ while (midirecv(boffset,msg1,msg2,msg3)) (
    
 );
 
+   _global.clearmem==tchannel ? (
+     memset(bufstart,0,__memtop()-bufstart);
+     loop(l=0;8,clearlevel(l);l+=1);
+     bfs=0;
+     _global.clearmem=0;
+   );
   getstrings();
   //str="/home/gjs/reaperprojects/test/mpdjam/solo1.wav";
 
@@ -284,11 +290,6 @@ zzz10=gmem[loadpad+tchannel];
   
 
 
-_global.clearmem==tchannel ? (
-  memset(bufstart,0,__memtop()-bufstart);
-  loop(l=0;8,clearlevel(l);l+=1);
-  _global.clearmem=0;
-);
 
 
 spll=0;
