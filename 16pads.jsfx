@@ -449,7 +449,7 @@ local(i,staddr,l,g,a,j)
 );
 
 
-while (_global.padsloaded<16)(0;);
+//while (_global.padsloaded<16)(0;);
 //makeclean(); // mischien nweer weghalem als samples niet geledn worden
 save();
 
