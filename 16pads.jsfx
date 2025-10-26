@@ -114,7 +114,11 @@ local(level)
            
            // writestring(gfilename+(16*50*level)+(50*level),file);
            _global.clearlevel=level;
-            writestring(gfilename,file);
+           gmem[loadpad+pad]=1;
+           // writestring(gfilename,file);
+           memset(gfilename,1,200);
+            writestring(gfilename+1, file);
+            
             gmem[padlevel+pad]=level;
             
             pad==16 && level==0 ? #z1=file;
@@ -122,14 +126,14 @@ local(level)
             pad_level[pad]=level; 
             
 
-            gmem[loadpad+pad]=1;
+            
              _global.droppedonpad=pad;
             _global.loading=1;
     
            
              while( gmem[loadpad+pad]==1)(wait+=1;);
              _global.clearlevel=-1;
-
+            loop(100000,0;);
 
 );
 
@@ -137,7 +141,7 @@ local(level)
 function loadsamples()
 local(l,pad,file,i)
 (
-      loop(i=0;100000,wait+=1;);
+     
       pad=1;
       
       loop (16,
@@ -434,9 +438,12 @@ local(i,staddr,l,g,a,j)
 );
 
 
-
+while (_global.padsloaded<16)(0;);
 save();
-loadsamples(); 
+ls==1 ? (loadsamples(););
+ls=1;
+
+
 
 
 

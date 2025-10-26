@@ -74,7 +74,7 @@ f=0;
 offset=0;
 octavecor=logb(1/precisie,2)*12;
 
-
+_global.padsloaded+=1;
 
 //init_sample_data_defaults();
 //load_from_dropped(bufstart);
@@ -125,9 +125,66 @@ function adsr()
 );
 
 
+function clearlevel(level)
+(
+  level==0 ? #f0="":
+  level==1 ? #f1="":
+  level==2 ? #f2="":
+  level==3 ? #f3="":
+  level==4 ? #f4="":
+  level==5 ? #f5="":
+  level==6 ? #f6="":
+  level==7 ? #f7="";
+  loadfase[level]=0;
+  chid[level]=0;
+  sloaded[level]=0;
+  _global.clearlevel=-1;
+);
+
+function getstr(level)
+(
+  level==0 ? #g=#f0:
+  level==1 ? #g=#f1:
+  level==2 ? #g=#f2:
+  level==3 ? #g=#f3:
+  level==4 ? #g=#f4:
+  level==5 ? #g=#f5:
+  level==6 ? #g=#f6:
+  level==7 ? #g=#f7:
+  #g;
+);
+
+function getstrings()
+local(level)
+(
+  level=gmem[padlevel+tchannel];
+   _global.droppedonpad==tchannel  ?(
+   
+   
+   _global.clearlevel==level ?  clearlevel(level);
+     
+      
+    
+      
+  gmem[padlevel+tchannel]==0 ? #f0=readstring(gfilename+1):
+  gmem[padlevel+tchannel]==1 ? #f1=readstring(gfilename+1):
+  gmem[padlevel+tchannel]==2 ? #f2=readstring(gfilename+1):
+  gmem[padlevel+tchannel]==3 ? #f3=readstring(gfilename+1):
+  gmem[padlevel+tchannel]==4 ? #f4=readstring(gfilename+1):
+  gmem[padlevel+tchannel]==5 ? #f5=readstring(gfilename+1):
+  gmem[padlevel+tchannel]==6 ? #f6=readstring(gfilename+1):
+  gmem[padlevel+tchannel]==7 ? #f7=readstring(gfilename+1);
+  zzz=gmem[padlevel+tchannel];
+  gmem[loadpad+tchannel]=0;
+  //#f0="E:/music/test/mpdjam/solo1.wav";
+  //#f1="E:/music/test/mpdjam/solo2.wav";
+  );
+
+);
 init();
 
 @serialize
+//file_mem(0,bufstart,__memtop()-bufstart);
  
 @slider
 
@@ -206,69 +263,6 @@ while (midirecv(boffset,msg1,msg2,msg3)) (
    
 );
 
-
-@sample
-zzz10=gmem[loadpad+tchannel];
-
-
-function clearlevel(level)
-(
-  level==0 ? #f0="":
-  level==1 ? #f1="":
-  level==2 ? #f2="":
-  level==3 ? #f3="":
-  level==4 ? #f4="":
-  level==5 ? #f5="":
-  level==6 ? #f6="":
-  level==7 ? #f7="";
-  loadfase[level]=0;
-  chid[level]=0;
-  sloaded[level]=0;
-  _global.clearlevel=-1;
-);
-
-function getstr(level)
-(
-  level==0 ? #g=#f0:
-  level==1 ? #g=#f1:
-  level==2 ? #g=#f2:
-  level==3 ? #g=#f3:
-  level==4 ? #g=#f4:
-  level==5 ? #g=#f5:
-  level==6 ? #g=#f6:
-  level==7 ? #g=#f7:
-  #g;
-);
-
-function getstrings()
-local(level)
-(
-  level=gmem[padlevel+tchannel];
-   _global.droppedonpad==tchannel || strlen(getstr(level))==0  ?(
-   
-   
-   _global.clearlevel==level ?  clearlevel(level);
-     
-      
-    
-      
-  gmem[padlevel+tchannel]==0 ? #f0=readstring(gfilename):
-  gmem[padlevel+tchannel]==1 ? #f1=readstring(gfilename):
-  gmem[padlevel+tchannel]==2 ? #f2=readstring(gfilename):
-  gmem[padlevel+tchannel]==3 ? #f3=readstring(gfilename):
-  gmem[padlevel+tchannel]==4 ? #f4=readstring(gfilename):
-  gmem[padlevel+tchannel]==5 ? #f5=readstring(gfilename):
-  gmem[padlevel+tchannel]==6 ? #f6=readstring(gfilename):
-  gmem[padlevel+tchannel]==7 ? #f7=readstring(gfilename);
-  zzz=gmem[padlevel+tchannel];
-  gmem[loadpad+tchannel]=0;
-  //#f0="E:/music/test/mpdjam/solo1.wav";
-  //#f1="E:/music/test/mpdjam/solo2.wav";
-  );
-
-);
-
-
   getstrings();
   //str="/home/gjs/reaperprojects/test/mpdjam/solo1.wav";
 
@@ -280,6 +274,12 @@ local(level)
   getfile3( #f5,5,tchannel);
   getfile3( #f6,6,tchannel);
   getfile3( #f7,7,tchannel);
+  
+@sample
+zzz10=gmem[loadpad+tchannel];
+
+
+
 
   
 

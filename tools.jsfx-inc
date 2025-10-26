@@ -220,7 +220,7 @@ local(filename,ptr)
 
   loadfase[level]==0  ? (
 	  #filestr=str;
-	  fchunck=1024;
+	  fchunck=2048;
 	  chid[level]=0;
 	  handle[level] = file_open(#filestr);
 	  file_riff(handle[level],'rqsr' ,srate);
@@ -346,4 +346,31 @@ function debug(x,y,w,h,_fontsize,_interlinie)
   
 
 
+);
+
+function encode_string(s) local(c_s, i) (
+  i = 0;
+  c_s = 0;
+  while(
+    c_s = c_s << 8;
+    c_s = c_s + str_getchar(s, 4-i);  
+    i = i+1;
+    i < 5;
+  );
+  c_s;
+);
+
+function decode_string(c_s) local (i, c_ss, _) (
+  i = 0;
+  strcpy (_, "");
+  while(
+    c_ss = c_s & 0xFF;
+    c_s = c_s >> 8;
+    c_ss >= 32 ? (
+	 str_setchar(_, -0.25, c_ss);
+	   i += 1;
+    );  
+    (i < 4) & (c_ss >= 32);
+  );
+  _;
 );
