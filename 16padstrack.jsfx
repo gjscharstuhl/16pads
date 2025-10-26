@@ -210,13 +210,36 @@ while (midirecv(boffset,msg1,msg2,msg3)) (
 @sample
 zzz10=gmem[loadpad+tchannel];
 
+
+function clearlevel(level)
+(
+  level==0 ? #f0="":
+  level==1 ? #f1="":
+  level==2 ? #f2="":
+  level==3 ? #f3="":
+  level==4 ? #f4="":
+  level==5 ? #f5="":
+  level==6 ? #f6="":
+  level==7 ? #f7="";
+  loadfase[level]=0;
+  chid[level]=0;
+  sloaded[level]=0;
+  _global.clearlevel=-1;
+);
+
 function getstrings()
 local(level)
 (
    _global.droppedonpad==tchannel ?(
    level=gmem[padlevel+tchannel];
-  gmem[padlevel+tchannel]==0  ? #f0=readstring(gfilename+(16*50*level)+(50*level)):
-  gmem[padlevel+tchannel]==1  ? #f1=readstring(gfilename+(16*50*level)+(50*level)):
+   
+   _global.clearlevel==level ?  clearlevel(level);
+     
+      
+    
+      
+  gmem[padlevel+tchannel]==0 ? #f0=readstring(gfilename):
+  gmem[padlevel+tchannel]==1 ? #f1=readstring(gfilename):
   gmem[padlevel+tchannel]==2 ? #f2=readstring(gfilename):
   gmem[padlevel+tchannel]==3 ? #f3=readstring(gfilename):
   gmem[padlevel+tchannel]==4 ? #f4=readstring(gfilename):
@@ -224,9 +247,9 @@ local(level)
   gmem[padlevel+tchannel]==6 ? #f6=readstring(gfilename):
   gmem[padlevel+tchannel]==7 ? #f7=readstring(gfilename);
   zzz=gmem[padlevel+tchannel];
-  
-  #f0="E:/music/test/mpdjam/solo1.wav";
-  #f1="E:/music/test/mpdjam/solo2.wav";
+  gmem[loadpad+tchannel]=0;
+  //#f0="E:/music/test/mpdjam/solo1.wav";
+  //#f1="E:/music/test/mpdjam/solo2.wav";
   );
 
 );
@@ -234,18 +257,24 @@ local(level)
 
   getstrings();
   //str="/home/gjs/reaperprojects/test/mpdjam/solo1.wav";
-  
+
   getfile3( #f0,0,tchannel);
   getfile3( #f1,1,tchannel);
   getfile3( #f2,2,tchannel);
   getfile3( #f3,3,tchannel);
   getfile3( #f4,4,tchannel);
   getfile3( #f5,5,tchannel);
-  
+  getfile3( #f6,6,tchannel);
+  getfile3( #f7,7,tchannel);
+
   
 
 
-_global.clearmem==tchannel ? (memset(bufstart,0,__memtop()-bufstart);_global.clearmem=0);
+_global.clearmem==tchannel ? (
+  memset(bufstart,0,__memtop()-bufstart);
+  loop(l=0;8,clearlevel(l);l+=1);
+  _global.clearmem=0;
+);
 
 
 spll=0;

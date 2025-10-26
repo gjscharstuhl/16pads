@@ -3,7 +3,7 @@
 
 
 function writestring(mem,s)
-local (len,i,c,mem)
+local (len,i,c)
 (
   
   len=strlen(s);
@@ -51,7 +51,7 @@ function debug2(mem)
 
 
 function readstring(m)
-local (i,ch,myVar)
+local (ch,myVar,ir)
 (
   #rstr="";
   ir=0;
@@ -67,6 +67,7 @@ local (i,ch,myVar)
   Myvar>0;
   );
    _global.loading=0;
+    
   #rstr;
   
 );
@@ -219,7 +220,7 @@ local(filename,ptr)
 
   loadfase[level]==0  ? (
 	  #filestr=str;
-	  fchunck=100;
+	  fchunck=1024;
 	  chid[level]=0;
 	  handle[level] = file_open(#filestr);
 	  file_riff(handle[level],'rqsr' ,srate);
