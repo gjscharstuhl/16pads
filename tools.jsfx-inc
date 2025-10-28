@@ -163,56 +163,7 @@ local(filename,ptr,fmem,buffsize,bufstart)
 
 );
 
-function getfile2(str,level,pad)
-local(filename,ptr)
-(
-  loadfase==0 ? (
-	  #filestr=str;
-	  fchunck=10;
-	  chid=0;
-	  handle = file_open(#filestr);
-	  file_riff(handle,'rqsr' ,srate);
-	  buflength=file_avail(handle);
-	  
-	  bufstart=3000;
-	  bufsize=(__memtop()-bufstart)/8;
-	 // bfs=max(gmem[gbufsize+pad]=(floor(buflength/bufsize)+1)*bufsize,bfs);
-	  bfs=bufsize;
-	   fmem= bufstart+(level*bufsize);
-	   memset( bufstart,0,bfs);
-	  gmem[loadpad+pad]=1;
-	  
-	  
-	  handle>=0 ? loadfase=1;
-  ):
-  loadfase==1 ? 
-  (
-    
 
-	sloaded=chid*fchunck;
-	file_mem(handle,bufstart+(level*bfs)+sloaded,fchunck);
-	//memset( bufstart+sloaded,1,chunck-1);
-    chid+=1;
-    zzz9+=1;
-    //bufstart[sloaded]=1;
-    sloaded>bfs ? loadfase=2;
-    zzz6=chid;
-    zzz7=sloaded;
-    zzz8=loadfase;
-  ):
-  
-  loadfase==2 ?
-  (
-	file_close(handle);
-	_global.droppedonpad=-1;
-	fileready=1;
-	gmem[loadpad+pad] =2;
-	//loadfase=-1;
-	chid=0;
-	zzz14=1;
-  );
-	
-);
 
 function getfile3(str,level,pad)
 local(filename,ptr)
@@ -230,7 +181,7 @@ local(filename,ptr)
 	  bufsize=(__memtop()-bufstart)/8;
 	  bfs=gmem[gbufsize+pad]=max((floor(buflength/bufsize)+1)*bufsize,bfs);
 	  //bfs=bufsize*2;
-	  
+	 // memset(bufstart+(level*bfs),0,bfs);
 	   //memset( bufstart,0,bfs);
 	  gmem[loadpad+pad]=1;
 	  
@@ -352,31 +303,33 @@ function debug(x,y,w,h,_fontsize,_interlinie)
 function loadsample(pad,level)
 local(level)
 (
+    _global.droppedonpad=-1;
 		 file=(pad*16)+level;
 		 #f=file;
 		 
 		 // writestring(gfilename+(16*50*level)+(50*level),file);
 		 _global.clearlevel=level;
-		 gmem[loadpad+pad]=1;
+		while (_global.clearlevel==level);
 		 // writestring(gfilename,file);
 		 memset(gfilename,1,200);
-		  writestring(gfilename+1, file);
-		  
-		  gmem[padlevel+pad]=level;
-		  
-		  pad==16 && level==0 ? #z1=file;
-		  pad==16 && level==1 ? #z2=file;
+     #test="";
+      while (strlen(#test)==0)(
+		    writestring(gfilename, file);
+        #test=readstring(gfilename);
+      );
+  		  
+		  gmem[padlevel+pad]=level;		  
 		  pad_level[pad]=level; 
 		  
 
 		  
 		   _global.droppedonpad=pad;
 		  _global.loading=1;
-    
+       gmem[loadpad+pad]=1;
 		 
 		   while( gmem[loadpad+pad]==1)(wait+=1;);
 		   _global.clearlevel=-1;
-		  loop(100000,0;);
+
 
 );
 

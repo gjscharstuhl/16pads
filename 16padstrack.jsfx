@@ -166,14 +166,14 @@ local(level)
       
     
       
-  gmem[padlevel+tchannel]==0 ? #f0=readstring(gfilename+1):
-  gmem[padlevel+tchannel]==1 ? #f1=readstring(gfilename+1):
-  gmem[padlevel+tchannel]==2 ? #f2=readstring(gfilename+1):
-  gmem[padlevel+tchannel]==3 ? #f3=readstring(gfilename+1):
-  gmem[padlevel+tchannel]==4 ? #f4=readstring(gfilename+1):
-  gmem[padlevel+tchannel]==5 ? #f5=readstring(gfilename+1):
-  gmem[padlevel+tchannel]==6 ? #f6=readstring(gfilename+1):
-  gmem[padlevel+tchannel]==7 ? #f7=readstring(gfilename+1);
+  gmem[padlevel+tchannel]==0 ? #f0=readstring(gfilename):
+  gmem[padlevel+tchannel]==1 ? #f1=readstring(gfilename):
+  gmem[padlevel+tchannel]==2 ? #f2=readstring(gfilename):
+  gmem[padlevel+tchannel]==3 ? #f3=readstring(gfilename):
+  gmem[padlevel+tchannel]==4 ? #f4=readstring(gfilename):
+  gmem[padlevel+tchannel]==5 ? #f5=readstring(gfilename):
+  gmem[padlevel+tchannel]==6 ? #f6=readstring(gfilename):
+  gmem[padlevel+tchannel]==7 ? #f7=readstring(gfilename);
   zzz=gmem[padlevel+tchannel];
   gmem[loadpad+tchannel]=0;
   //#f0="E:/music/test/mpdjam/solo1.wav";

@@ -111,7 +111,7 @@ function makeclean()
   pad=1;
   loop(16,
     _global.clearmem=pad;
-    while (_global.clearmem!=0)(0;);
+    while (_global.clearmem==pad)(0;);
     pad+=1;
   );
 );
@@ -419,9 +419,9 @@ local(i,staddr,l,g,a,j)
 
 
 //while (_global.padsloaded<16)(0;);
-//makeclean(); // mischien nweer weghalem als samples niet geledn worden
-save();
 
+save();
+//makeclean(); // mischien nweer weghalem als samples niet geledn worden
 loadsamples();
 
 ls=1;
