@@ -171,7 +171,7 @@ local(filename,ptr)
 
   loadfase[level]==0  ? (
 	  #filestr=str;
-	  fchunck=2048;
+	  fchunck=128;
 	  chid[level]=0;
 	  handle[level] = file_open(#filestr);
 	  file_riff(handle[level],'rqsr' ,srate);

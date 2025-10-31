@@ -107,11 +107,12 @@ function hilightfocus(id)
 );
 
 function makeclean()
+local(pad)
 (
   pad=1;
   loop(16,
     _global.clearmem=pad;
-    while (_global.clearmem==pad)(0;);
+    while (_global.clearmem!=-1)(0;);
     pad+=1;
   );
 );
@@ -421,7 +422,7 @@ local(i,staddr,l,g,a,j)
 //while (_global.padsloaded<16)(0;);
 
 save();
-//makeclean(); // mischien nweer weghalem als samples niet geledn worden
+makeclean(); // mischien nweer weghalem als samples niet geledn worden
 loadsamples();
 
 ls=1;

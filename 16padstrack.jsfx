@@ -126,33 +126,36 @@ function adsr()
 
 
 function clearlevel(level)
+local(addr)
 (
-  level==0 ? #f0="":
-  level==1 ? #f1="":
-  level==2 ? #f2="":
-  level==3 ? #f3="":
-  level==4 ? #f4="":
-  level==5 ? #f5="":
-  level==6 ? #f6="":
-  level==7 ? #f7="";
-  loadfase[level]=0;
+
+   //memset(bufstart+bfs*level,0,bfs);
+   addr=40+level;
+   strcpy(addr,"");
+   loadfase[level]=0;
   chid[level]=0;
   sloaded[level]=0;
-  _global.clearlevel=-1;
+  zzlevel+=1
+  
+ // _global.clearlevel=-1;
 );
 
-function getstr(level)
+function clearmem()
+local(lv)
 (
-  level==0 ? #g=#f0:
-  level==1 ? #g=#f1:
-  level==2 ? #g=#f2:
-  level==3 ? #g=#f3:
-  level==4 ? #g=#f4:
-  level==5 ? #g=#f5:
-  level==6 ? #g=#f6:
-  level==7 ? #g=#f7:
-  #g;
+   _global.clearmem==tchannel ? (
+      
+   
+      zzzclearmem=1;
+     //memset(bufstart,0,__memtop()-bufstart);
+     loop(lv=0;8,clearlevel(lv);lv+=1);
+     bfs=0;   
+     _global.clearmem=-1;
+     zzz11=1;
+   );
+
 );
+
 
 function getstrings()
 local(level)
@@ -164,16 +167,14 @@ local(level)
    _global.clearlevel==level ?  clearlevel(level);
      
       
-    
+
+  addr=40+level;
+  
+  while (strlen(addr)==0)
+  (
+    strcpy(addr,readstring(gfilename));
+  );
       
-  gmem[padlevel+tchannel]==0 ? #f0=readstring(gfilename):
-  gmem[padlevel+tchannel]==1 ? #f1=readstring(gfilename):
-  gmem[padlevel+tchannel]==2 ? #f2=readstring(gfilename):
-  gmem[padlevel+tchannel]==3 ? #f3=readstring(gfilename):
-  gmem[padlevel+tchannel]==4 ? #f4=readstring(gfilename):
-  gmem[padlevel+tchannel]==5 ? #f5=readstring(gfilename):
-  gmem[padlevel+tchannel]==6 ? #f6=readstring(gfilename):
-  gmem[padlevel+tchannel]==7 ? #f7=readstring(gfilename);
   zzz=gmem[padlevel+tchannel];
   gmem[loadpad+tchannel]=0;
   //#f0="E:/music/test/mpdjam/solo1.wav";
@@ -184,7 +185,7 @@ local(level)
 init();
 
 @serialize
-file_mem(0,bufstart,__memtop()-bufstart);
+//file_mem(0,bufstart,__memtop()-bufstart);
  
 @slider
 
@@ -263,29 +264,20 @@ while (midirecv(boffset,msg1,msg2,msg3)) (
    
 );
 
-   _global.clearmem==tchannel ? (
-     memset(bufstart,0,__memtop()-bufstart);
-     loop(l=0;8,clearlevel(l);l+=1);
-     bfs=0;
-     _global.clearmem=0;
-   );
+  clearmem();   
   getstrings();
   //str="/home/gjs/reaperprojects/test/mpdjam/solo1.wav";
 
-  getfile3( #f0,0,tchannel);
-  getfile3( #f1,1,tchannel);
-  getfile3( #f2,2,tchannel);
-  getfile3( #f3,3,tchannel);
-  getfile3( #f4,4,tchannel);
-  getfile3( #f5,5,tchannel);
-  getfile3( #f6,6,tchannel);
-  getfile3( #f7,7,tchannel);
   
 @sample
 zzz10=gmem[loadpad+tchannel];
 
 
-
+  loop (lv=0;8,
+    addr=40+lv;
+    getfile3(addr,lv,tchannel);
+    lv+=1;
+  );
 
   
 
