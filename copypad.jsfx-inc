@@ -104,7 +104,7 @@ function copypad()
   */
   mouse_cap == 5 && frompad==-1 ? (frompad=gfocus;cplev=0;tcopy=1;);
   mouse_cap == 9 && frompad==-1 ? (frompad=gfocus;cplev=0;tswap=1;);
-  mouse_cap ==17 ? (loop (8,pop(gfocus);_global.clearmem=gfocus;));
+  mouse_cap ==17 ? (loop (cl=1;8,pop(gfocus);_global.clearmem=gfocus;));
   mouse_cap==0 && frompad>=0 && frompad!=gfocus && tcopy ? (docopy=1;tcopy=0;tswap=0; copy(frompad,gfocus);frompad=-1;);
   mouse_cap==0 && frompad>=0 && frompad!=gfocus && tswap ? (doswap=1;tcopy=0;tswap=0;fase=0;swap(frompad,gfocus);frompad=-1;);
 

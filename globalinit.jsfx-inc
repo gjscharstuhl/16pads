@@ -7,7 +7,7 @@ loadpad=200;
 gfilename=400;
 
 
-
+gclearmem=1860;
 gbufsize=1900;
 activepad=1920;
 loaded=1940;

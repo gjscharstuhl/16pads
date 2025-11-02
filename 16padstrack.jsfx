@@ -135,25 +135,27 @@ local(addr)
    loadfase[level]=0;
   chid[level]=0;
   sloaded[level]=0;
-  zzlevel+=1
+  zzlevel+=1;
+  bfs=0;
   
  // _global.clearlevel=-1;
 );
 
-function clearmem()
+function clearmemo()
 local(lv)
 (
    _global.clearmem==tchannel ? (
       
-   
+    
       zzzclearmem=1;
      //memset(bufstart,0,__memtop()-bufstart);
      loop(lv=0;8,clearlevel(lv);lv+=1);
      bfs=0;   
+     
      _global.clearmem=-1;
      zzz11=1;
    );
-
+  
 );
 
 
@@ -190,6 +192,39 @@ init();
 @slider
 
 @block
+
+function clearmem()
+(
+    debug(gclearmem);
+    zzz9=gmem[gclearmem+tchannel];
+    zcmem=999;
+   
+   gmem[gclearmem+tchannel]==1 ? (
+      _global.makeclean+=1;
+      zzz11+1;
+      ready=0;
+      
+       gmem[gclearmem+tchannel]==1 ? (
+        fchunck=9096;
+        scleared=clid*fchunck;
+        memset(bufstart+scleared ,0,fchunck);
+        clid+=1;
+        c=__memtop()-bufstart;
+        scleared>=c ? gmem[gclearmem+tchannel]=2;
+      );
+
+     gmem[gclearmem+tchannel]==2 ? (
+       loop(lv=0;8,clearlevel(lv);lv+=1);
+       bfs=0;   
+       _global.clearmem=-1;
+       gmem[gclearmem+tchannel]=3;
+       scleared=0;
+       ready=1;
+     );
+     
+   );
+   
+);
 
 function getlevel(vel,level*)
 local(mode,samplelamount,levelborder)
@@ -265,7 +300,18 @@ while (midirecv(boffset,msg1,msg2,msg3)) (
 );
 
   clearmem();   
-  getstrings();
+  
+  ready==1 ?
+  (
+    getstrings();
+    zzz11=gmem[gsampleamount+tchannel];
+    loop (lve=0;gmem[gsampleamount+tchannel],
+      addr=40+lve;
+      loadfase[lve]<3 ? getfile3(addr,lve,tchannel);
+      lve+=1;
+    );
+   // ready=0;
+  );
   //str="/home/gjs/reaperprojects/test/mpdjam/solo1.wav";
 
   
@@ -273,11 +319,7 @@ while (midirecv(boffset,msg1,msg2,msg3)) (
 zzz10=gmem[loadpad+tchannel];
 
 
-  loop (lv=0;8,
-    addr=40+lv;
-    getfile3(addr,lv,tchannel);
-    lv+=1;
-  );
+
 
   
 
@@ -312,7 +354,7 @@ note.state>0 ?
   
   spll <= 1 && spll> -1 ? (spl0=spll;);
   splr <= 1 && splr> -1 ? (spl1=splr;);
-  note.buf+=2;
+  note.buf<samplestart+size  ? note.buf+=2;
   level=gmem[padlevel+tchannel];
   size=gmem[lp2+(16*tchannel)+level]-gmem[lp1+(16*tchannel)+level];
   note.buf>=samplestart+size ? (

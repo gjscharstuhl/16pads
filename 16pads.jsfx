@@ -109,12 +109,18 @@ function hilightfocus(id)
 function makeclean()
 local(pad)
 (
-  pad=1;
-  loop(16,
-    _global.clearmem=pad;
-    while (_global.clearmem!=-1)(0;);
+  zzz8=0;
+
+  loop(pad=1;16,
+    while (gmem[gclearmem+pad]!=1)
+    (
+      gmem[gclearmem+pad]=1 ;
+    );
     pad+=1;
+    
   );
+  //while (gmem[gclearmem+16]!=3)(0;);
+  
 );
 
 function loadsamples()
@@ -134,7 +140,7 @@ local(l,pad,file,i)
       pad+=1;
     );
 
-    
+ 
 
 );
 
@@ -335,26 +341,14 @@ initpads();
 
 @serialize
 
-function clearmem()
-(
-    memset(0,0,__memtop());
-    i=0;
-    loop(__memtop,gmem[i]=0;i+=1);
-    init();
-    initpads();
-    s=0;
-    loop(1024,strcpy(s, "");s+=1;);
-    //_global.clearmem=1;
-   // _global.clearmem==1 ? (wait+=1;);
 
-);
 
 function save()
 local(i,staddr,l,g,a,j)
 (
   _global.ready=0;
   mode=1;
-  file_avail(0)>=0 ? clearmem();
+  //file_avail(0)>=0 ? clearmem();
   
   loop (i=1;16,gmem[loadpad+i]=-1;i+=1;);
   i=1;
@@ -421,9 +415,17 @@ local(i,staddr,l,g,a,j)
 
 //while (_global.padsloaded<16)(0;);
 
+zzz6=zzz5%2;
+
+loading=1;
 save();
+zzz6==0 ?(
 makeclean(); // mischien nweer weghalem als samples niet geledn worden
+while (gmem[gclearmem+16]!=3) (zzz9=gmem[gclearmem+16];zzz10+=1;);
 loadsamples();
+);
+ zzz5+=1;
+loading=0;
 
 ls=1;
 
@@ -546,6 +548,7 @@ while (midirecv(boffset,msg1,msg2,msg3)) (
     !(ignorenoteof(msg2) && onOffStatus==noteOff ) ? midisend(0,msg1,msg2,msg3); // pass through 
     );
 );
+
 
 
 @sample
@@ -820,6 +823,9 @@ local(filenameshort,display_padsample,display_activepad)
   gfx_x=x+left;
   gfx_y+=interlinie;
   gfx_drawstr("Playmode:");gfx_drawstr(playmode[pad_mode[gfocus]]);
+  gfx_x=x+left;
+  gfx_y+=interlinie;
+  loading==1 ? gfx_drawstr("Loading:");
 
   
 );
