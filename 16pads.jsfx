@@ -631,9 +631,8 @@ function pop(padid)
 
 function cyclemode(i)
 (
-  pad_mode[i]+=1;
-  pad_mode[i]>5 ? pad_mode[i]=1;
-  gmem[gpadmode+i]=pad_mode[i];
+  gmem[gpadmode+i]+=1;
+  gmem[gpadmode+i]>5 ? gmem[gpadmode+i]=1;
 
 );
 
@@ -818,7 +817,7 @@ local(filenameshort,display_padsample,display_activepad)
   
   gfx_x=x+left;
   gfx_y+=interlinie;
-  gfx_drawstr("Playmode:");gfx_drawstr(playmode[pad_mode[gfocus]]);
+  gfx_drawstr("Playmode:");gfx_drawstr(playmode[gmem[gpadmode+gfocus]]);
 
   
 );
