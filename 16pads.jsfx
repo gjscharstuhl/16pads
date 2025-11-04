@@ -129,7 +129,7 @@ local(l,pad,file,i)
        // _global.clearmem=pad;
        // while (_global.clearmem!=0)(0;);
         
-        gmem[loadpad+pad]=0;
+       // gmem[loadpad+pad]=0;
         l=0;
         loop(pad_sampleamount[pad],
           
@@ -138,7 +138,7 @@ local(l,pad,file,i)
           l+=1;
 
         );
-        gmem[loadpad+pad]=pad;
+       // gmem[loadpad+pad]=pad;
       pad+=1;
       _global.goload=1;
     );
@@ -559,12 +559,17 @@ function stacksample(padid,file)
 local(staddr,l)
 (
   //+gmem[padlevel+i];
-  staddr=(padid*16);l=0;
+  l=0;
+  staddr=(padid*16);//+pad_sampleamount[padid];
   while (strlen(staddr)>0)( staddr+=1;l+=1;);
-  strcpy(staddr,file);
   
-  pad_sampleamount[padid]=l+1;
-  zzz1=pad_sampleamount[padid]=l+1;
+  strcpy(staddr,file);
+  #zztest=staddr;
+  pad_sampleamount[padid]+=1;
+  gmem[padlevel+padid]=l;
+  zzz9=l;
+  //l=gmem[padlevel+padid]-1;
+ // zzz1=pad_sampleamount[padid]=l+1;
   loadsample(padid,l);
   //getfile(file,0,pad);
   //cpy2gmem(bufstart,bufstart,gmem[gbufsize+pad]);

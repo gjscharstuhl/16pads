@@ -193,7 +193,7 @@ local(filename,ptr)
     //bfs=bufsize*2;
    // memset(bufstart+(level*bfs),0,bfs);
      //memset( bufstart,0,bfs);
-    gmem[loadpad+pad]=1;
+    gmem[loadpad+pad]=-1;
     
     
     handle[level]>=0 ? loadfase[level]=1;
@@ -219,7 +219,7 @@ local(filename,ptr)
   file_close(handle[level]);
   _global.droppedonpad=-1;
   fileready=1;
-  gmem[loadpad+pad] =2;
+  //gmem[loadpad+pad] =2;
   //loadfase=-1;
   chid=0;
   
@@ -318,7 +318,7 @@ local(level)
      #f=file;
      
 
-   
+     gmem[loadpad+pad]=0;
      // writestring(gfilename,file);
      
      #test="";
@@ -326,9 +326,9 @@ local(level)
         writestring(gfilename+(pad*255*16)+(level*255), file);
         #test=readstring(gfilename+(pad*255*16)+(level*255));
       );
-        
-        addr=40+level;
-        strcpy(addr,#f);
+        gmem[loadpad+pad]=pad; 
+        //addr=40+level;
+        //strcpy(addr,#f);
 
 
 );

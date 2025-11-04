@@ -171,7 +171,7 @@ local(l)
      
   );
   zzz14=gmem[gsampleamount+tchannel];
-  loop(l=0;gmem[gsampleamount+tchannel],
+  loop(l=0;8,
     addr=40+l;addrold=50+l;
     strcpy(#f,"");
     strcpy(addr,"");
