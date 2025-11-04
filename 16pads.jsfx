@@ -129,7 +129,7 @@ local(l,pad,file,i)
        // _global.clearmem=pad;
        // while (_global.clearmem!=0)(0;);
         
-        
+        gmem[loadpad+pad]=0;
         l=0;
         loop(pad_sampleamount[pad],
           
