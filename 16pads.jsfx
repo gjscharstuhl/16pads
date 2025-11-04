@@ -119,18 +119,28 @@ function makeclean()
 function loadsamples()
 local(l,pad,file,i)
 (
-     
+     _global.goload=0;
+      loop(l=0;8,addr=40+l;strcpy(addr,"");l+=1);
+     //clrgmem(gfilename,__memtop()-gfilename);
+     zzz8= gmem[done+17];
       pad=1;
       
       loop (16,
        // _global.clearmem=pad;
        // while (_global.clearmem!=0)(0;);
+        
+        
         l=0;
         loop(pad_sampleamount[pad],
+          
+          //clrgmem(gfilename+(pad*255*16)+(l*255),255);
           loadsample(pad,l);
           l+=1;
+
         );
+        gmem[loadpad+pad]=pad;
       pad+=1;
+      _global.goload=1;
     );
 
     
@@ -240,7 +250,7 @@ function init()
   amountbuttons=4;
   bufstart=3000;
   bufsize=(__memtop()-bufstart)/8;
-  loop(i=0;16,pad_mode[i]=1;gmem[gpadmode]=1;gmem[loadpad+(i+1)]=-1;);
+  loop(i=0;16,pad_mode[i]=1;gmem[gpadmode+i+1]=1;gmem[loadpad+(i+1)]=-1;);
   
   frompad=-1;
 
@@ -304,28 +314,6 @@ function changemode()
   clicked=0;
 );
 
-function transfer()
-(
-  goload > -1 ? 
-  (
-     
-    //chunck=gmem[gbufsize+droppedonpad]/1024;
-    //cpy2gmem(bufstart+(goload*(chunck-1)),bufstart+(goload*(chunck-1)),chunck);
-    //goload+=1;
-    goload>=1024 ? (
-
-      _global.droppedonpad=droppedonpad;
-      _global.sampleready=l;   
-      gmem[loadpad+droppedonpad]=0;
-      while (_global.droppedonpad!=-1)(wait+=1;);
-      droppedonpad=-1;
-      goload=-1;
-  
-    );
-  
-  );
-);
-
 
 init();
 initpads();
@@ -334,26 +322,14 @@ initpads();
 
 @serialize
 
-function clearmem()
-(
-    memset(0,0,__memtop());
-    i=0;
-    loop(__memtop,gmem[i]=0;i+=1);
-    init();
-    initpads();
-    s=0;
-    loop(1024,strcpy(s, "");s+=1;);
-    //_global.clearmem=1;
-   // _global.clearmem==1 ? (wait+=1;);
 
-);
 
 function save()
 local(i,staddr,l,g,a,j)
 (
   _global.ready=0;
   mode=1;
-  file_avail(0)>=0 ? clearmem();
+
   
   loop (i=1;16,gmem[loadpad+i]=-1;i+=1;);
   i=1;

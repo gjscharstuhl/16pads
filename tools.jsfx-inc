@@ -103,16 +103,26 @@ function getpadstr(pad,level)
 function writepadstr(pad,level,str)
 (
 
-	writestring(400+(pad*8*255)+level*255,str);
+  writestring(400+(pad*8*255)+level*255,str);
 );
 
 
-
+function clrgmem(gmemaddr,size)
+local(i)
+(
+  
+  i=0;
+  loop(size,
+    gmem[gmemaddr+i]=0;
+    i+=1;
+  );
+  
+);
 
 function cpy2gmem(srcaddr,gmemaddr,size)
 local(i)
 (
-	
+  
   i=0;
   loop(size,
     gmem[gmemaddr+i]=srcaddr[i];
@@ -139,10 +149,10 @@ local(filename,ptr,fmem,buffsize,bufstart)
   handle = file_open(#filestr);
   handle >=0 ? 
   (
-	#zzz=str;
-	zzz4=level;
-	bufstart=3000;
-	bufsize=(__memtop()-bufstart)/8;
+  #zzz=str;
+  zzz4=level;
+  bufstart=3000;
+  bufsize=(__memtop()-bufstart)/8;
     fmem= bufstart+(level*bufsize);
 
     file_riff(handle,'rqsr' ,srate);
@@ -170,31 +180,31 @@ local(filename,ptr)
 (
 
   loadfase[level]==0  ? (
-	  #filestr=str;
-	  fchunck=2048;
-	  chid[level]=0;
-	  handle[level] = file_open(#filestr);
-	  file_riff(handle[level],'rqsr' ,srate);
-	  buflength=file_avail(handle[level]);
-	  
-	  bufstart=3000;
-	  bufsize=(__memtop()-bufstart)/8;
-	  bfs=gmem[gbufsize+pad]=max((floor(buflength/bufsize)+1)*bufsize,bfs);
-	  //bfs=bufsize*2;
-	 // memset(bufstart+(level*bfs),0,bfs);
-	   //memset( bufstart,0,bfs);
-	  gmem[loadpad+pad]=1;
-	  
-	  
-	  handle[level]>=0 ? loadfase[level]=1;
+    #filestr=str;
+    fchunck=2048;
+    chid[level]=0;
+    handle[level] = file_open(#filestr);
+    file_riff(handle[level],'rqsr' ,srate);
+    buflength=file_avail(handle[level]);
+    
+    bufstart=3000;
+    bufsize=(__memtop()-bufstart)/8;
+    bfs=gmem[gbufsize+pad]=max((floor(buflength/bufsize)+1)*bufsize,bfs);
+    //bfs=bufsize*2;
+   // memset(bufstart+(level*bfs),0,bfs);
+     //memset( bufstart,0,bfs);
+    gmem[loadpad+pad]=1;
+    
+    
+    handle[level]>=0 ? loadfase[level]=1;
   ):
   loadfase[level]==1 ? 
   (
     
 
-	sloaded[level]=chid[level]*fchunck;
-	file_mem(handle[level],bufstart+(level*bfs)+sloaded[level],fchunck);
-	//memset( bufstart+sloaded,1,chunck-1);
+  sloaded[level]=chid[level]*fchunck;
+  file_mem(handle[level],bufstart+(level*bfs)+sloaded[level],fchunck);
+  //memset( bufstart+sloaded,1,chunck-1);
     chid[level]+=1;
 
     //bufstart[sloaded]=1;
@@ -206,14 +216,14 @@ local(filename,ptr)
   
   loadfase[level]==2 ?
   (
-	file_close(handle[level]);
-	_global.droppedonpad=-1;
-	fileready=1;
-	gmem[loadpad+pad] =2;
-	//loadfase=-1;
-	chid=0;
-	
-	loadfase[level]=3;
+  file_close(handle[level]);
+  _global.droppedonpad=-1;
+  fileready=1;
+  gmem[loadpad+pad] =2;
+  //loadfase=-1;
+  chid=0;
+  
+  loadfase[level]=3;
   );
 
 );
@@ -223,31 +233,31 @@ local(filename,ptr)
 (
   
   loadfase[level]==0 ? (
-	  #filestr=str;
-	  fchunck=10;
-	  chid[level]=0;
-	  handle[level] = file_open(#filestr);
-	  file_riff(handle[level],'rqsr' ,srate);
-	  buflength=file_avail(handle[level]);
-	  
-	  bufstart=3000;
-	  bufsize=(__memtop()-bufstart)/8;
-	  bfs=max(gmem[gbufsize+pad]=(floor(buflength/bufsize)+1)*bufsize,bfs);
-	 // bfs=bufsize;
-	  
-	   //memset( bufstart,0,bfs);
-	  gmem[loadpad+pad]=1;
-	  
-	  
-	  handle[level]>=0 ? loadfase[level]=1;
+    #filestr=str;
+    fchunck=10;
+    chid[level]=0;
+    handle[level] = file_open(#filestr);
+    file_riff(handle[level],'rqsr' ,srate);
+    buflength=file_avail(handle[level]);
+    
+    bufstart=3000;
+    bufsize=(__memtop()-bufstart)/8;
+    bfs=max(gmem[gbufsize+pad]=(floor(buflength/bufsize)+1)*bufsize,bfs);
+   // bfs=bufsize;
+    
+     //memset( bufstart,0,bfs);
+    gmem[loadpad+pad]=1;
+    
+    
+    handle[level]>=0 ? loadfase[level]=1;
   ):
   loadfase[level]==1 ? 
   (
     
 
-	sloaded[level]=chid[level]*fchunck;
-	file_mem(handle[level],bufstart+(level*bfs)+sloaded[level],fchunck);
-	//memset( bufstart+sloaded,1,chunck-1);
+  sloaded[level]=chid[level]*fchunck;
+  file_mem(handle[level],bufstart+(level*bfs)+sloaded[level],fchunck);
+  //memset( bufstart+sloaded,1,chunck-1);
     chid[level]+=1;
 
     //bufstart[sloaded]=1;
@@ -259,16 +269,16 @@ local(filename,ptr)
   
   loadfase[level]==2 ?
   (
-	file_close(handle[level]);
-	_global.droppedonpad=-1;
-	fileready=1;
-	gmem[loadpad+pad] =2;
-	//loadfase=-1;
-	chid=0;
-	
-	loadfase[level]=3;
+  file_close(handle[level]);
+  _global.droppedonpad=-1;
+  fileready=1;
+  gmem[loadpad+pad] =2;
+  //loadfase=-1;
+  chid=0;
+  
+  loadfase[level]=3;
   );
-	
+  
 );
 function print(s,val)
 local (str)
@@ -303,32 +313,22 @@ function debug(x,y,w,h,_fontsize,_interlinie)
 function loadsample(pad,level)
 local(level)
 (
-    _global.droppedonpad=-1;
-		 file=(pad*16)+level;
-		 #f=file;
-		 
-		 // writestring(gfilename+(16*50*level)+(50*level),file);
-		 _global.clearlevel=level;
-		while (_global.clearlevel==level);
-		 // writestring(gfilename,file);
-		 memset(gfilename,1,200);
+
+     file=(pad*16)+level;
+     #f=file;
+     
+
+   
+     // writestring(gfilename,file);
+     
      #test="";
       while (strlen(#test)==0)(
-		    writestring(gfilename, file);
-        #test=readstring(gfilename);
+        writestring(gfilename+(pad*255*16)+(level*255), file);
+        #test=readstring(gfilename+(pad*255*16)+(level*255));
       );
-  		  
-		  gmem[padlevel+pad]=level;		  
-		  pad_level[pad]=level; 
-		  
-
-		  
-		   _global.droppedonpad=pad;
-		  _global.loading=1;
-       gmem[loadpad+pad]=1;
-		 
-		   while( gmem[loadpad+pad]==1)(wait+=1;);
-		   _global.clearlevel=-1;
+        
+        addr=40+level;
+        strcpy(addr,#f);
 
 
 );
