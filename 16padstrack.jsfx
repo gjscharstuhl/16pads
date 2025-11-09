@@ -112,6 +112,7 @@ function writenote(nr,vel,state,buf,a,d,s,r)
 
 function adsr()
 (
+  srate == 0 ? srate=48000;
   level=gmem[padlevel+tchannel];
   this.a<1 ? this.a+=(1/srate/gmem[env_a+(tchannel*16)+level]*1000);
   this.a>1 ? this.a=1;

@@ -116,7 +116,7 @@ local(x,y,fs)
 
   
   
-  x=280;y=75;w=415;h=190;bf=bufsize;
+  x=280;y=75;w=415;h=190;bf=buflength;
   //? mouse_wheel>0 ? (fac/2*;mouse_wheel=0;)
   
   
