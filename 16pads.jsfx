@@ -717,7 +717,7 @@ local(i,fs,i2)
     //pad_pad[i]==0 ?pad_vel[i]-=0.2;
     //pad_vel[i]<0 ? pad_vel[i]=0;
    gfx_getdropfile(0,#fstr);
-    
+
    p.focus>-1 ? pad_focustime[p.id]+=1 : pad_focustime[p.id]=0;  ;//: p.focustime=0;
     
     
@@ -725,8 +725,14 @@ local(i,fs,i2)
     p.focus>-1 &&  _global.droppedonpad ==-1 && pad_focustime[p.id]>droptime && strlen(#fstr)>0  ? 
     (
      
-     
-      stacksample(p.id,#fstr);
+      loop (dr=0;8,
+        gfx_getdropfile(dr,#fstr);
+        strlen(#fstr)>0 &&  pad_sampleamount[p.id]<8 ? (stacksample(p.id,#fstr););
+        #fstr="";
+        dr+=1;
+      
+      );
+      
       gfx_getdropfile(-1);
 
       //#shortfile=shortfilename(#fstr);
