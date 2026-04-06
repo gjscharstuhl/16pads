@@ -146,7 +146,7 @@ function clearlevel(level)
 init();
 
 @serialize
-file_mem(0,bufstart,__memtop()-bufstart);
+//file_mem(0,bufstart,__memtop()-bufstart);
  
 @slider
 
@@ -243,7 +243,7 @@ while (midirecv(boffset,msg1,msg2,msg3)) (
     trigTest = noteTrig == 0 ? (noteOn):(noteOff); // comparison value based on our note on/off setting
 
     notenrblock=msg2;xxw3=msg2;
-    channel == inChannel  ? (
+    channel ==9  ? (
         trigTest == onOffStatus ? (
             freq=440*2^((msg2-rootnote)/12);
             vel=msg3;

@@ -432,8 +432,8 @@ local(i,onOffStatus,offset,cnote,ingroup)
    i=1;
    loop(16,
       cnote!=chokegroup[cid*16+i] ? (
-        midisend(offset,noteOff,chokegroup[cid*16+i],0);
-      
+       // midisend(9,noteOff,chokegroup[cid*16+i],0);
+        midisend(9,msg1,chokegroup[cid*16+i],0);
       );
       i+=1;
     );
@@ -468,17 +468,20 @@ local(i)
 (
   isoff=0;
   i=1;
+  zzz5=0;
+  zzz1=noteoffgroup[0];
+  zzz2=noteoffgroup[1];;zzz3=msg2;
   loop(16,
-    noteoffgroup[i]==msg2 ? isoff=1;
+    noteoffgroup[i]==msg2 ? (isoff=1;zzz5=1);
     i+=1;
-  );
-  isoff;
+  ); isoff;
 );
 
 while (midirecv(boffset,msg1,msg2,msg3)) ( 
     channel = msg1 & $x0F;
     pressure = msg1 & $xD0;
-    onOffStatus = msg1 & $xF0; // 144 == Note On, 128 == Note Off
+    onOffStatus = (msg1 & $xF0) ; // 144 == Note On, 128 == Note Off
+    (msg3==0) ? onOffStatus=noteOff; ;
     //msg1 = ignorenoteof(onOffStatus,msg2) ;
     trigTest = noteTrig == 0 ? (noteOn):(noteOff); // comparison value based on our note on/off setting
     velon= onOffStatus==noteOn ? 1:0;
@@ -518,7 +521,9 @@ while (midirecv(boffset,msg1,msg2,msg3)) (
 
     mode==2 || mode==5 ? dolearn();
     
-    !(ignorenoteof(msg2) && onOffStatus==noteOff ) ? midisend(0,msg1,msg2,msg3); // pass through 
+    !(ignorenoteof(msg2) && onOffStatus==noteOff ) ? midisend(9,msg1,msg2,msg3); // pass through 
+    //!(ignorenoteof(msg2)  ) ? midisend(9,msg1,msg2,msg3); // pass through 
+    
     );
 );
 
