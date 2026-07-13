@@ -110,8 +110,9 @@ function makeclean()
 (
   pad=1;
   loop(16,
-    _global.clearmem=pad;
-    while (_global.clearmem==pad)(0;);
+    _global.clearmem+pad=pad;
+    gmem[clearmem+pad]=pad;
+   // while (_global.clearmem+pad==pad)(0;);
     pad+=1;
   );
 );
@@ -478,55 +479,59 @@ local(i)
 );
 
 while (midirecv(boffset,msg1,msg2,msg3)) ( 
-    channel = msg1 & $x0F;
-    pressure = msg1 & $xD0;
-    onOffStatus = (msg1 & $xF0) ; // 144 == Note On, 128 == Note Off
-    (msg3==0) ? onOffStatus=noteOff; ;
-    //msg1 = ignorenoteof(onOffStatus,msg2) ;
-    trigTest = noteTrig == 0 ? (noteOn):(noteOff); // comparison value based on our note on/off setting
-    velon= onOffStatus==noteOn ? 1:0;
-     vel=msg3;
-    ib=1;
-    pressure!=208 ? (
-    loop (16,
-      
-        playednote=msg2;
-        pad_note[ib]==msg2 ? 
-        (
-          
-          pad_vel[ib]=vel;
-          onOffStatus==noteOn  ? pad_pad[ib]=1:pad_pad[ib]=0;
-          pressure==208 ? pad_vel[ib]=0;
-         // debug[pad_pad];
-         
-          
-        );
+    
+    status = msg1 & $xF0;
+    
+    // ignore poly aftertouch ($xA0) and channel pressure ($xD0)
+    status != $xA0 && status != $xD0 ? (
+    
+        channel = msg1 & $x0F;
+        pressure = msg1 & $xD0;
+        onOffStatus = status; // 144 == Note On, 128 == Note Off
+        msg3 == 0 ? onOffStatus = noteOff;
         
-        ib+=1;
-    );
-    // handle chokegroups
-    loop (c=0;8,
-      choke(boffset,playednote,c);
-      
-      c+=1;
-    );
-    // handle layergroups
-    loop (c=0;64,
-      layergroupnotes[c]==playednote ? (setlayer(boffset,playednote,c););
-      c+=1;
-    );
-    
-    
-    notenrblock=msg2;
-
-    mode==2 || mode==5 ? dolearn();
-    
-    !(ignorenoteof(msg2) && onOffStatus==noteOff ) ? midisend(9,msg1,msg2,msg3); // pass through 
-    //!(ignorenoteof(msg2)  ) ? midisend(9,msg1,msg2,msg3); // pass through 
-    
+        trigTest = noteTrig == 0 ? noteOn : noteOff;
+        velon = onOffStatus == noteOn ? 1 : 0;
+        vel = msg3;
+        ib = 1;
+        
+        pressure != 208 ? (
+            loop(16,
+                playednote = msg2;
+                
+                pad_note[ib] == msg2 ? (
+                    pad_vel[ib] = vel;
+                    onOffStatus == noteOn ? pad_pad[ib] = 1 : pad_pad[ib] = 0;
+                    pressure == 208 ? pad_vel[ib] = 0;
+                );
+                
+                ib += 1;
+            );
+            
+            // handle chokegroups
+            loop(c = 0; 8,
+                choke(boffset, playednote, c);
+                c += 1;
+            );
+            
+            // handle layergroups
+            loop(c = 0; 64,
+                layergroupnotes[c] == playednote ? (
+                    setlayer(boffset, playednote, c);
+                );
+                c += 1;
+            );
+            
+            notenrblock = msg2;
+            
+            mode == 2 || mode == 5 ? dolearn();
+            
+            !(ignorenoteof(msg2) && onOffStatus == noteOff) ? (
+                midisend(boffset,msg1,msg2,msg3);
+            );
+        );
     );
 );
-
 
 @sample
 
